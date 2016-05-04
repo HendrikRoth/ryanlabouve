@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ryan LaBouve</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic|Droid+Sans:400,700|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/zenburn.min.css">
+    <script src="//cdn.jsdelivr.net/highlight.js/8.8.0/highlight.min.js"></script>
+    <script src="/bower_components/zepto/zepto.min.js"></script>
+  </head>
+  <body>
+  <form class='search-form'>
+    <div class="search-bar hide">
+      <div class="container">
+        <input placeholder="SEARCH..."/>
+      </div>
+    </div>
+  </form>
+
+  <div class="mobile-menu hide md-hide close-menu">
+  <div class="clearfix px2 bar brand-menu">
+    <div class="left">
+      Menu
+    </div>
+    <div class="right bold">
+      <span class="">x</span>
+    </div>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/" class="btn">
+      Blog
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/speaking" class="btn">
+      Speaking
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/about" class="btn">
+      About
+    </a>
+  </div>
+  <div class="brand-rss bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-rss"></span> RSS
+    </a>
+  </div>
+  <div class="brand-twitter bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-twitter"></span> Twitter
+    </a>
+  </div>
+  <div class="brand-linkedin bar clearfix">
+    <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-linkedin"></span> LinkedIn
+    </a>
+  </div>
+  <div class="brand-github bar clearfix">
+    <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-github"></span> Github
+    </a>
+  </div>
+  <div class="brand-dribbble bar clearfix">
+    <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-dribbble"></span> Dribbble
+    </a>
+  </div>
+</div>
+
+  <div class="header">
+    <div class="clearfix container">
+      <a href="/" class="header__title h3 bold caps left px2">
+        <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" /> Ryan LaBouve
+      </a>
+
+      <a href="/" class="btn left serif italic md-show">
+        Blog
+      </a>
+      <a href="/speaking" class="btn left serif italic md-show">
+        Speaking
+      </a>
+      <a href="/about" class="btn left serif italic md-show">
+        About
+      </a>
+
+      <div class="right md-hide">
+        <a href="#" class="btn btn-icon btn-dark left open-menu">
+          <span class="typcn typcn-th-menu-outline"></span> Menu
+        </a>
+      </div>
+      <div class="right md-show">
+        <a href="http://twitter.com/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-twitter"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-linkedin"></span>
+        </a>
+        <a href="http://github.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-github"></span>
+        </a>
+        <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-dribbble"></span>
+        </a>
+        <a href="" class="btn btn-icon btn-dark btn-search left">
+          <span class="typcn typcn-zoom"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="container">
+    <div class="box py4 px2 sm-px4">
+      <div class="post lg-px4">
+        <div class="right primary">April 18, 2016</div>
+        <h1 class="serif">Ember Blog with JWT and Ember Simple Auth, Part 2</h1>
+        <p></p>
+<p>Goal:</p>
+<blockquote>
+<p>Serve an API backed blog with Public (available to everyone) and Private posts (have to log in to see).</p>
+</blockquote>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa-2/final-product-anno.jpg" alt="Final Product"></p>
+<p>Welcome to part 2. Haven&#39;t done part 1 yet? Catch up <a href="http://ryanlabouve.com/ember-blog-with-jwt-and-esa/">here</a>.</p>
+<p>Today we are going to focus on installing and customizing Ember Simple Auth, TDD&#39;ing and building features along the way.</p>
+<p>Here&#39;s the Specific Agenda:</p>
+<ol>
+<li>Install addon</li>
+<li>Extend mirage to mock our API&#39;s authentication/authorization</li>
+<li>Implement login form and Custom Authenticator (ESA)</li>
+<li>Implement private-posts and an Custom Authorizer (ESA)</li>
+<li>Use bootstrap to style things up a bit</li>
+</ol>
+<p>Let&#39;s get started</p>
+<pre><code>ember install ember-simple-auth
+</code></pre><h2 id="extending-mirage-to-test-auth">Extending Mirage to Test Auth</h2>
+<p>We&#39;ll need to customize ESA to how our API handles authentication. To guide our customization, we are going to make mirage act like our server does currently</p>
+<p>Good testing here gives us the benefit of a tight feedback loop, even when things get particularly tricky (as they do with installing anything auth related).</p>
+<h3 id="using-authenticators-to-request-our-token">Using Authenticators to Request our Token</h3>
+<p>In vanilla CURL language, to request a token we need to <code>POST</code> to a specified endpoint, with our username and password in a specified format.</p>
+<p>In our case, that means:</p>
+<pre><code>POST http://localhost:3000/knock/auth_token
+{ &quot;auth&quot; : { &quot;email&quot;: &quot;lester@tester.com&quot;, &quot;password&quot; : &quot;test1234&quot; }}
+</code></pre><p>If it&#39;s successful, we&#39;ll get back a <code>201 Created</code> along with the token associated to our user.</p>
+<pre><code>201 Created
+{ &quot;jwt&quot; : &quot;token123456789&quot; }
+</code></pre><p>If the username and password are incorrect we&#39;ll get a <code>404</code>.</p>
+<p>Let&#39;s start by simulating this in mirage:</p>
+<pre><code>this.post(&#39;/knock/auth&#39;, (db, request) =&gt;  {
+  const req = JSON.parse(request.requestBody);
+  const pw = Ember.get(req, &#39;auth.password&#39;);
+
+  if(pw === &#39;test1234&#39;) {
+    return new Mirage.Response(201, {}, { jwt: &#39;hotdog&#39; });
+  } else {
+    return new Mirage.Response(404, {}, {});
+  }
+});
+</code></pre><blockquote>
+<p><code>hotdog</code> will be the token we use for testing... because I was hungry when I wrote this.</p>
+</blockquote>
+<h3 id="making-authorized-requests-with-hotdog-">Making Authorized Requests with <code>hotdog</code></h3>
+<p>And when we make requests, we pass the token</p>
+<pre><code>Authorization: Bearer hotdog
+GET /private-posts
+</code></pre><p>Assuming our token is correct, the request will process normally. If the token is invalid, then we&#39;ll get a <code>401 Unauthorized</code>.</p>
+<p>To simulate this in mirage, we&#39;ll do</p>
+<pre><code>  // mirage/config.js
+  ...
+
+  this.get(&#39;/private-posts&#39;, ({ privatePost }, request) =&gt; {
+    const token = Ember.get(request, &#39;requestHeaders.Authorization&#39;);
+    if (token === &#39;Bearer hotdog&#39;) {
+      return privatePost.all();
+    } else {
+      return new Mirage.Response(401, {}, {});
+    }
+  });
+  ...
+</code></pre><h3 id="mirage-for-our-priavteposts">Mirage for our PriavtePosts</h3>
+<p>We&#39;ll repeat the process early for getting the <code>PrivatePost</code> resource setup in mirage.</p>
+<pre><code>ember g mirage-model privatePost
+ember g mirage-factory privatePost
+</code></pre><p>And again, this should make the Schema from the API <code>PrivatePost(title:string, body:text, type:string)</code>.</p>
+<pre><code>// mirage/factories/private-post.js
+import { Factory, faker } from &#39;ember-cli-mirage&#39;;
+
+export default Factory.extend({
+  body: faker.lorem.words(),
+  title: faker.lorem.paragraphs(),
+  createdAt: faker.date.past()
+});
+</code></pre><p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/ffdd071f87a16dd6f5b64313016d1661b80bfa2f">checkpoint</a>)</p>
+<p>So far, we&#39;ve just been doing enough setup to mock how our server currently works. Let&#39;s dive into implementing some stuff now.</p>
+<h2 id="implement-login-form-and-custom-authenticator-esa-">Implement login form and Custom Authenticator (ESA)</h2>
+<p>To create our tight feedback loop, we&#39;ll go ahead and work on <code>{{login-form}}</code>, since this will be able to quickly hit logging in and out.</p>
+<p>Here are the main cases we want to handle:</p>
+<ul>
+<li>If a user is not logged in, they see a login form</li>
+<li>If a user is logged in, they see a logout button</li>
+<li>A user can logout</li>
+<li>A user can login</li>
+<li>If a user puts in the wrong login credentials, they see a login error</li>
+</ul>
+<blockquote>
+<p>This process seems tedious, but focusing on TDD our way through helps us keep focus and make consistent progress on a good path.</p>
+</blockquote>
+<p>Generate the Test:</p>
+<pre><code>ember g acceptance-test login-form
+</code></pre><p>I am going to make a fairly presumptuous first pass at this. In reality, you might bounce back and forth a lot more to expand this test over time.</p>
+<pre><code>// tests/acceptance/login-form-test.js
+
+import { test } from &#39;qunit&#39;;
+import moduleForAcceptance from &#39;ember-jwt-esa-blog/tests/helpers/module-for-acceptance&#39;;
+import Ember from &#39;ember&#39;;
+
+// These test helps are included with ESA, and
+// are absolutely critical for sane testing.
+import {
+  currentSession,
+  invalidateSession ,
+  authenticateSession
+} from &#39;ember-jwt-esa-blog/tests/helpers/ember-simple-auth&#39;;
+
+moduleForAcceptance(&#39;Acceptance | login form&#39;);
+
+
+test(&#39;If a user is not logged in, they see a login form&#39;, function(assert) {
+  invalidateSession(this.application);
+  visit(&#39;/&#39;);
+
+  andThen(function() {
+    const loginFormPresent = find(&#39;#loginForm&#39;).length &gt; 0 ? true : false;
+    assert.equal(loginFormPresent, true);
+  });
+});
+
+test(&#39;if a user is logged in, they see a logout form&#39;, function(assert) {
+  authenticateSession(this.application);
+  visit(&#39;/&#39;);
+
+  andThen(function() {
+    assert.equal(currentURL(), &#39;/&#39;);
+    const logoutBtnPresent = this.$(&#39;.logoutBtn&#39;).length &gt; 0 ? true : false;
+    assert.equal(
+      logoutBtnPresent,
+      true,
+      &#39;An authed user should see the logout button&#39;
+    );
+
+    const loginFormPresent = find(&#39;#loginForm&#39;).length &gt; 0 ? true : false;
+    assert.equal(
+      loginFormPresent,
+      false,
+      &#39;An authed user not should see the login form&#39;
+    );
+  });
+});
+
+test(&#39;user can logout&#39;, function(assert) {
+  authenticateSession(this.application);
+  visit(&#39;/&#39;);
+  click(&#39;.logoutBtn&#39;);
+
+  andThen(() =&gt; {
+    const sesh = currentSession(this.application);
+    const isAuthed = Ember.get(sesh, &#39;isAuthenticated&#39;);
+    assert.equal(
+      isAuthed,
+      false,
+      &#39;After clicking logout, the user is no longer logged in&#39;
+    );
+
+  });
+});
+
+test(&#39;user can login&#39;, function(assert) {
+  invalidateSession(this.application);
+  visit(&#39;/&#39;);
+
+  fillIn(&#39;.username-field&#39;, &#39;lester@test.com&#39;);
+  fillIn(&#39;.password-field&#39;, &#39;test1234&#39;);
+  click(&#39;.login-btn&#39;);
+
+  andThen(() =&gt; {
+    const sesh = currentSession(this.application);
+    const isAuthed = Ember.get(sesh, &#39;isAuthenticated&#39;);
+    assert.equal(
+      isAuthed,
+      true,
+      &#39;after a user submits good creds to login form, they are logged in&#39;
+    );
+
+    const loginFormPresent = find(&#39;#loginForm&#39;).length &gt; 0 ? true : false;
+    assert.equal(
+      loginFormPresent,
+      false,
+      &#39;after we login, the login form disappears&#39;
+    )
+  });
+});
+
+test(&#39;If a user puts in the wrong login credentials, they see a login error&#39;, function(assert) {
+  invalidateSession(this.application);
+  visit(&#39;/&#39;);
+
+  fillIn(&#39;.username-field&#39;, &#39;lester@test.com&#39;);
+  fillIn(&#39;.password-field&#39;, &#39;wrongPassword&#39;);
+  click(&#39;.login-btn&#39;);
+
+  andThen(() =&gt; {
+    const sesh = currentSession(this.application);
+    const isAuthed = Ember.get(sesh, &#39;isAuthenticated&#39;);
+    assert.equal(
+      isAuthed,
+      false,
+      &#39;User submits bad username and password, fails&#39;
+    );
+
+    const isShowingLoginFails = find(&#39;.login-err&#39;).length &gt; 0 ? true : false;
+    assert.equal(
+      isShowingLoginFails,
+      true,
+      &#39;Shows user an error when they put in bad deets&#39;
+    );
+
+    const loginFormPresent = find(&#39;#loginForm&#39;).length &gt; 0 ? true : false;
+    assert.equal(
+      loginFormPresent,
+      true,
+      &#39;and we can still see the login form&#39;
+    )
+  });
+});
+</code></pre><p>Right now our tests make a giant wall of &quot;better luck next time&quot;. Let&#39;s just start picking from the top.</p>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa-2/part2-fu-tests.jpg" alt="fu tests"></p>
+<h4 id="login-form">Login Form</h4>
+<p>Generate login form component:</p>
+<pre><code>ember g component login-form --pod
+</code></pre><p>And a first pass at a very basic login form with fields that match what we already wrote in our test:</p>
+<pre><code>// app/components/login-form/template.hbs
+&lt;div id=&quot;loginForm&quot;&gt;
+  {{#if loginError}}
+    &lt;div class=&quot;login-err alert alert-error&quot;&gt;Bad deets dude.&lt;/div&gt;
+  {{/if}}
+
+  {{input
+    value=identification
+    placeholder=&quot;identification&quot;
+    class=&quot;username-field&quot;}}
+  {{input
+    type=&quot;password&quot;
+    placeholder=&quot;password&quot;
+    value=password
+    class=&quot;password-field&quot;}}
+  &lt;a href=&quot;/login&quot;
+     class=&quot;login-btn btn btn-primary&quot;
+     {{action &quot;login&quot;}}&gt;
+    Login
+  &lt;/a&gt;
+&lt;/div&gt;
+</code></pre><p>Cool. More red. Not a ton-o-info from the actual tests, so let&#39;s check out our console. <code>.logoutBtn</code> not found.</p>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa-2/part2-2-fu-tests.jpg" alt="fu tests 2"></p>
+<h4 id="logout-form">Logout Form</h4>
+<p>The strategy here is to use the <code>session</code> from ESA to show a login form, unless we are <code>session.isAuthenticated</code>, where we&#39;ll show a logout form.</p>
+<p>First, let&#39;s get the session in our component</p>
+<pre><code>// app/components/login-form/component.js
+import Ember from &#39;ember&#39;;
+
+export default Ember.Component.extend({
+  session: Ember.inject.service()
+});
+</code></pre><p>And next, we&#39;ll add the branch logic.</p>
+<pre><code>{{#unless session.isAuthenticated}}
+    ... login form from earlier
+{{else}}
+  &lt;a href=&quot;/logout&quot;
+     class=&quot;logoutBtn&quot;
+     {{action &quot;signout&quot;}}&gt;
+    logout
+  &lt;/a&gt;
+{{/unless}}
+</code></pre><p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/192cf82d074f35a1b363133f78ac520860c63464">checkpoint</a>)</p>
+<p>New batch of errors! Let&#39;s go ahead and add the <code>login</code> and <code>signout</code> actions it&#39;s complaining about.</p>
+<pre><code>import Ember from &#39;ember&#39;;
+
+export default Ember.Component.extend({
+  session: Ember.inject.service(),
+  actions: {
+    login() {
+      return true;
+    },
+    signout() {
+      return true;
+    }
+  }
+});
+</code></pre><h3 id="ember-simple-auth-the-tricky-parts">Ember Simple Auth: The Tricky Parts</h3>
+<p>This part is tricky. Auth is a hard problem to solve, so any library that does it well will involve a bit of config.</p>
+<h4 id="kickoff-configure">Kickoff &amp; Configure</h4>
+<p>Let&#39;s generate our custom authenticator and authorizer, which will generated stubbed out versions of the files. </p>
+<pre><code>ember g authenticator knockjwt
+// =&gt; create app/authenticators/knockjwt.js
+
+ember g authorizer knockjwt
+// =&gt; create app/authorizer/knockjwt.js
+</code></pre><p>SO we can see what&#39;s going on, I suggest dropping debuggers in the critical parts of what was generated so we can see what&#39;s calling what.</p>
+<p>Authorizer:</p>
+<pre><code>// app/authorizer/knockjwt.js
+import Base from &#39;ember-simple-auth/authorizers/base&#39;;
+
+export default Base.extend({
+  authorize(/*data, block*/) {
+    debugger;
+  }
+});
+</code></pre><p>Authenticator:</p>
+<pre><code>import Ember from &#39;ember&#39;;
+import Base from &#39;ember-simple-auth/authenticators/base&#39;;
+
+export default Base.extend({
+  restore(data) {
+    debugger;
+  },
+
+  // This method will make the call to our auth server
+  authenticate(/*args*/) {
+    debugger;
+  },
+
+  invalidate(data) {
+    debugger;
+  }
+});
+</code></pre><p>And a little configure for ESA to recognize our custom auth and API situation:</p>
+<pre><code>// config/environment.js
+
+  ENV[&#39;simple-auth&#39;] = {
+    store: &#39;simple-auth-session-store:local-storage&#39;,
+    authorizer: &#39;authorizer:knockjwt&#39;,
+    crossOriginWhiteList: [&#39;http://localhost:3000&#39;],
+    routeAfterAuthentication: &#39;/&#39;
+  }
+</code></pre><p>Let&#39;s also use the <a href="http://ember-simple-auth.com/api/classes/ApplicationRouteMixin.html">ApplicationRouteMixin</a> for the application route.</p>
+<pre><code>// app/routes/application.js
+import Ember from &#39;ember&#39;;
+import ApplicationRouteMixin from &#39;ember-simple-auth/mixins/application-route-mixin&#39;;
+
+export default Ember.Route.extend(ApplicationRouteMixin, {
+  model() {
+    return this.store.findAll(&#39;publicPost&#39;);
+  }
+});
+</code></pre><p>This will also mean you need to <code>needs: [&#39;service:session&#39;]</code> to make the <a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/76b111ceb19ebc5c130f1d3b0d4a34d4fd120270">application unit test pass</a> for the route unit test.</p>
+<h4 id="customize-the-authenticator">Customize the Authenticator</h4>
+<p>Ok. Now let&#39;s make the authentication call using our custom <code>application:knockjwt</code>. This should hit the debugger and we can step through what&#39;s happening.</p>
+<pre><code>// app/components/login-form/component.js
+login() {
+    // reset login error on each attempt
+    this.set(&#39;loginError&#39;, false);
+
+    const { identification, password } = this.getProperties( &#39;identification&#39;, &#39;password&#39;);
+    const s = this.get(&#39;session&#39;);
+
+    s.authenticate(&#39;authenticator:knockjwt&#39;, { identification, password }).catch(() =&gt; {
+        // If login fails, just set an error
+        // so the error UI shows up
+        this.set(&#39;loginError&#39;, true);
+    });
+}
+</code></pre><p>Cool. Run <code>http://localhost:4200/tests</code> again. We get to the authenticator&#39;s authenticate method!</p>
+<p>And we know, in order to get token, we&#39;ll need to <code>POST /knock_auth</code> with the credentials. So let&#39;s go ahead and do that:</p>
+<pre><code>import Ember from &#39;ember&#39;;
+import Base from &#39;ember-simple-auth/authenticators/base&#39;;
+// import host from our environment
+import config from &#39;../config/environment&#39;;
+
+const { RSVP: { Promise }, $: { ajax }, run } = Ember;
+
+export default Base.extend({
+  tokenEndpoint: `${config.host}/knock/auth_token`,
+
+  restore(data) {
+    debugger;
+  },
+
+  authenticate(creds) {
+    const { identification, password } = creds;
+
+    const data = JSON.stringify({
+      auth: {
+        email: identification,
+        password
+      }
+    });
+
+    const requestOptions = {
+      url: this.tokenEndpoint,
+      type: &#39;POST&#39;,
+      data,
+      contentType: &#39;application/json&#39;,
+      dataType: &#39;json&#39;
+    };
+
+    return new Promise((resolve, reject) =&gt; {
+      ajax(requestOptions).then((response) =&gt; {
+        const { jwt } = response;
+        run((response) =&gt; {
+          resolve({
+            token: jwt
+          });
+        });
+      }, (error) =&gt; {
+        run(() =&gt; {
+          reject(error);
+        });
+      });
+    });
+  },
+
+  invalidate(data) {
+    // debugger;
+    return Promise.resolve(data);
+  }
+
+  }
+});
+</code></pre><p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa-2/part2-3-fu-tests.jpg" alt="user can login"></p>
+<h4 id="logging-user-out">Logging User Out</h4>
+<p>This is quite a bit easier than the login portion:</p>
+<pre><code>// app/components/login-form/component.js
+...
+signout() {
+  this.get(&#39;session&#39;).invalidate();
+}
+</code></pre><p>(Please see <a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/2e96f83c710f9134ed7acabcf6fb5279ee536838">this change</a> I made for the login-form integration test to pass.)</p>
+<blockquote>
+<p>Danger! Our tests are green right now, but we know we haven&#39;t implemented Authorizer&#39;s <code>restore</code>. I&#39;d honestly want to dive into some unit tests at this point, but I think I&#39;ll save that for a future post. Check out the ones that simple auth des for the <a href="https://github.com/simplabs/ember-simple-auth/blob/master/tests/unit/authenticators/devise-test.js">devise authenticator</a> in the meantime for a good example.</p>
+</blockquote>
+<pre><code>  // When page refreshes, we have the ability
+  // to inspect ESA data and see if we can restore
+  restore(data) {
+    return new Promise((resolve, reject) =&gt; {
+      if (!Ember.isEmpty(data.token)) {
+        resolve(data);
+      } else {
+        reject();
+      }
+    });
+  }
+</code></pre><p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/680376e2fced0ed0fc294aac2881c7d4e7f4620c">checkpoint</a>)</p>
+<h3 id="implement-privateposts-and-custom-authorizer">Implement PrivatePosts and Custom Authorizer</h3>
+<p>After we have successfully logged in, the authorizer is what allows us to take the login token and pass it with our request to the server.</p>
+<p>The best way to get this working is TDD private-posts.</p>
+<pre><code>ember g acceptance-test private-post
+</code></pre><pre><code>import { test } from &#39;qunit&#39;;
+import moduleForAcceptance from &#39;ember-jwt-esa-blog/tests/helpers/module-for-acceptance&#39;;
+
+import {
+  invalidateSession ,
+  authenticateSession
+} from &#39;ember-jwt-esa-blog/tests/helpers/ember-simple-auth&#39;;
+
+moduleForAcceptance(&#39;Acceptance | private post&#39;);
+
+test(&#39;see private posts when authed&#39;, function(assert) {
+  authenticateSession(this.application);
+  server.createList(&#39;private-post&#39;, 5);
+  visit(&#39;/&#39;);
+  andThen(() =&gt; {
+    assert.equal(
+      find(&#39;.private-post&#39;).length,
+      5,
+      &#39;we can see the right number of private posts when we are logged in&#39;
+    );
+  });
+});
+
+test(&#39;see no private posts not authed&#39;, function(assert) {
+  server.createList(&#39;private-post&#39;, 5);
+  invalidateSession(this.application);
+  visit(&#39;/&#39;);
+  andThen(() =&gt; {
+    assert.equal(
+      find(&#39;.private-post&#39;).length,
+      0,
+      &#39;we can\&#39;t see any private posts when we are not logged in&#39;
+    );
+  });
+});
+</code></pre><p>Generate our <code>{{private-posts}}</code> component.</p>
+<pre><code>ember g component private-posts --pod
+</code></pre><p>Add component to application template</p>
+<pre><code>// app/templates/application.hbs
+{{login-form}}
+&lt;br /&gt;
+{{public-posts posts=model}}
+{{private-posts}}
+</code></pre><p>There are a couple different ways to handle loading in the <code>PrivatePosts</code>, but I&#39;m going to opt to handle all of that from the {{private-posts}} component. So you&#39;ll notice we are going to inject the store and the session, and then load them only if we are authenticated and conditionally when our authentication status changes.</p>
+<pre><code>// app/components/private-posts/component.js
+import Ember from &#39;ember&#39;;
+
+const { computed, get } = Ember;
+
+export default Ember.Component.extend({
+  session: Ember.inject.service(),
+  store: Ember.inject.service(),
+
+  posts: computed(&#39;session.isAuthenticated&#39;, function() {
+    const authed = get(this, &#39;session.isAuthenticated&#39;);
+    const store = get(this, &#39;store&#39;);
+    if ( authed ) {
+      return store.findAll(&#39;privatePost&#39;);
+    } else {
+      return undefined;
+    }
+  })
+});
+</code></pre><p>Put out posts in template</p>
+<pre><code>{{#each posts as |post|}}
+  &lt;div class=&quot;private-post&quot;&gt;
+    {{blog-post title=post.title body=post.body}}
+  &lt;/div&gt;
+{{/each}}
+</code></pre><p>No model found, so let&#39;s get on that!</p>
+<pre><code>ember g model private-post
+</code></pre><p>I&#39;d suggest doing the same type of model tests from earlier on the PrivatePost model, but for brevity we&#39;ll omit them here.</p>
+<pre><code>import Model from &#39;ember-data/model&#39;;
+import attr from &#39;ember-data/attr&#39;;
+
+export default Model.extend({
+  title: attr(&#39;string&#39;),
+  body: attr(&#39;string&#39;),
+  createdAt: attr(&#39;date&#39;)
+});
+</code></pre><p>And now we are getting 401&#39;s even when authed. This sounds like it&#39;s time to work on our authorizer. We know we are not even hitting it currently, thanks to the debugger we dropped earlier.</p>
+<p>Let&#39;s make our way to the debugger that&#39;s currently sitting there.</p>
+<p>We&#39;ll do that by generating an adapter for <code>privatePost</code>, where we&#39;ll inform it to use the <code>knockjwt</code> authorizer we made via the <a href="http://ember-simple-auth.com/api/classes/DataAdapterMixin.html">DataAdapterMixin</a>, which is a nice bridge to inform Ember Data of our auth situation.</p>
+<pre><code>// remember, adapters describe how ED should request a given resource
+ember g adapter privatePost
+</code></pre><p>And then our adapter:</p>
+<pre><code>import ApplicationAdapter from &#39;./application&#39;;
+import DataAdapterMixin from &#39;ember-simple-auth/mixins/data-adapter-mixin&#39;;
+
+export default ApplicationAdapter.extend(DataAdapterMixin, {
+  authorizer: &#39;authorizer:knockjwt&#39;,
+});
+</code></pre><p>:boom: we are now seeing the debugger!!</p>
+<p>To implement the authorizer, we need to focus on passing the relevant token along with the request, then it should work.</p>
+<pre><code>import Base from &#39;ember-simple-auth/authorizers/base&#39;;
+import Ember from &#39;ember&#39;;
+
+export default Base.extend({
+  session: Ember.inject.service(),
+  authorize(data, block) {
+      // If we are testing, just going to hardcode the token
+    if (Ember.testing) {
+      block(&#39;Authorization&#39;, &#39;Bearer hotdog&#39;);
+    }
+    const { token } = data;
+    if (this.get(&#39;session.isAuthenticated&#39;) &amp;&amp; token) {
+        // The way this works is that we are just using
+        // xhr.setRequestHeader on the other side of this call
+        // here: https://github.com/simplabs/ember-simple-auth/blob/a8723a0d4e8eb256f5a9527de0d8a04aeff94846/addon/mixins/data-adapter-mixin.js#L77
+
+      block(&#39;Authorization&#39;, `Bearer ${token}`);
+    }
+  }
+});
+</code></pre><p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/tree/2e96f83c710f9134ed7acabcf6fb5279ee536838">checkpoint</a>)</p>
+<h2 id="bootstrap-pushing-pixels">Bootstrap &amp; Pushing Pixels</h2>
+<p>Now that our app works, everything else we do is bonus!</p>
+<h3 id="bootstrap">BootStrap</h3>
+<p>Add bootstrap (quick and dirty method):</p>
+<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css&quot; &gt;
+</code></pre><h3 id="adjust-layout">Adjust Layout</h3>
+<p>Divs divs divs for days!</p>
+<pre><code>&lt;div class=&quot;container m-y-3&quot;&gt;
+  &lt;div class=&quot;row header&quot;&gt;
+    &lt;div class=&quot;col-sm-6&quot;&gt;
+      &lt;h1&gt;blog&lt;/h1&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;col-sm-6&quot;&gt;
+      {{login-form}}
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;container&quot;&gt;
+  &lt;div class=&quot;row body&quot;&gt;
+    &lt;div class=&quot;col-sm-6&quot;&gt;
+      {{public-posts posts=model}}
+    &lt;/div&gt;
+    &lt;div class=&quot;col-sm-6&quot;&gt;
+      {{private-posts}}
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre><h3 id="adjust-components">Adjust Components</h3>
+<p>From here on out it&#39;s just a bunch of small adjustments all over the place. I&#39;m just going to link to the commit and go over a few highlights:</p>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa-2/final-product.jpg" alt="Final Product"></p>
+<ul>
+<li>Due to the HTML / CSS structure required for some bootstrap components, I had to put classesNames on the <code>component.js</code> in several cases.</li>
+<li>I changed the selectors being used in a few acceptance tests for similar reasons.</li>
+</ul>
+<p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/452b946163fe2f9cae7ec4e8a886bbe7d89194f1">CSS boss battle commit</a>)</p>
+<blockquote>
+<p>If it would be useful for anyone for me to walk through this, please let me know on twitter (<a href="http://twitter.com/ryanlabouve">@ryanlabouve</a>). I&#39;d be happy to do this!</p>
+</blockquote>
+<h2 id="closing-thoughts">Closing Thoughts</h2>
+<p>Authentication and Authorization is tricky. I&#39;m hoping this resource will show a no-holds barred example of how to start implementing it on an actual projects using methods you&#39;d be proud of.</p>
+<p>Please let me know if you have any feedback! Positive or negative, I&#39;d like for this to be as useful as possible so please read out to me on twitter <a href="http://twitter.com/ryanlabouve">@ryanlabouve</a> or on github <a href="https://github.com/ryanlabouve">github.com/ryanlabouve</a>.</p>
+<p></p>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <div class="clearfix mxn1">
+    <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box p3">
+        <img class="profile-pic profile-pic-sm center-block" src="../about.jpg" alt="Ryan LaBouve, Profile Pic" />
+        <h2 class="serif center">Ryan LaBouve</h2>
+        <p class="center text-primary primary">—Ember.js &amp; Node—</p>
+        <p class="h5 center">Disciple of Jesus Christ &amp; family man. Doer of JS &amp; maker of webs.</p>
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="bar brand-article">
+          <div class="btn serif italic"><span class="typcn typcn-document-text"></span> Recent Articles</div>
+        </div>
+      </div>
+      <div class="box p2">
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa-2" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-18-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-17-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/jwt-rails-api-challenge" class="h6">
+
+              JWT Rails API Challenge <div class="h6 muted right">04-12-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-infiniscroll-with-api" class="h6">
+
+              Ember Problems Infiniscroll with an... <div class="h6 muted right">09-27-15</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-pagination-with-api" class="h6">
+
+              Ember Problems, Pagination with an ... <div class="h6 muted right">09-26-15</div>
+            </a>
+            
+          </div>
+        
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="brand-rss bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-rss"></span> RSS
+          </a>
+        </div>
+        <div class="brand-twitter bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-twitter"></span> Twitter
+          </a>
+        </div>
+        <div class="brand-linkedin bar clearfix">
+          <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-linkedin"></span> LinkedIn
+          </a>
+        </div>
+        <div class="brand-github bar clearfix">
+          <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-github"></span> Github
+          </a>
+        </div>
+        <div class="brand-dribbble bar clearfix">
+          <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-dribbble"></span> Dribbble
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt4 center">
+  <a href="http://holyarchers.com">
+    <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" />
+  </a>
+</div>
+
+
+  <script src="/js/app.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71758047-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ryan LaBouve</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic|Droid+Sans:400,700|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/zenburn.min.css">
+    <script src="//cdn.jsdelivr.net/highlight.js/8.8.0/highlight.min.js"></script>
+    <script src="/bower_components/zepto/zepto.min.js"></script>
+  </head>
+  <body>
+  <form class='search-form'>
+    <div class="search-bar hide">
+      <div class="container">
+        <input placeholder="SEARCH..."/>
+      </div>
+    </div>
+  </form>
+
+  <div class="mobile-menu hide md-hide close-menu">
+  <div class="clearfix px2 bar brand-menu">
+    <div class="left">
+      Menu
+    </div>
+    <div class="right bold">
+      <span class="">x</span>
+    </div>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/" class="btn">
+      Blog
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/speaking" class="btn">
+      Speaking
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/about" class="btn">
+      About
+    </a>
+  </div>
+  <div class="brand-rss bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-rss"></span> RSS
+    </a>
+  </div>
+  <div class="brand-twitter bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-twitter"></span> Twitter
+    </a>
+  </div>
+  <div class="brand-linkedin bar clearfix">
+    <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-linkedin"></span> LinkedIn
+    </a>
+  </div>
+  <div class="brand-github bar clearfix">
+    <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-github"></span> Github
+    </a>
+  </div>
+  <div class="brand-dribbble bar clearfix">
+    <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-dribbble"></span> Dribbble
+    </a>
+  </div>
+</div>
+
+  <div class="header">
+    <div class="clearfix container">
+      <a href="/" class="header__title h3 bold caps left px2">
+        <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" /> Ryan LaBouve
+      </a>
+
+      <a href="/" class="btn left serif italic md-show">
+        Blog
+      </a>
+      <a href="/speaking" class="btn left serif italic md-show">
+        Speaking
+      </a>
+      <a href="/about" class="btn left serif italic md-show">
+        About
+      </a>
+
+      <div class="right md-hide">
+        <a href="#" class="btn btn-icon btn-dark left open-menu">
+          <span class="typcn typcn-th-menu-outline"></span> Menu
+        </a>
+      </div>
+      <div class="right md-show">
+        <a href="http://twitter.com/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-twitter"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-linkedin"></span>
+        </a>
+        <a href="http://github.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-github"></span>
+        </a>
+        <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-dribbble"></span>
+        </a>
+        <a href="" class="btn btn-icon btn-dark btn-search left">
+          <span class="typcn typcn-zoom"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="container">
+    <div class="box py4 px2 sm-px4">
+      <div class="post lg-px4">
+        <div class="right primary">September 27, 2015</div>
+        <h1 class="serif">Ember Problems Infiniscroll with an API</h1>
+        <p>Instead of clicking next for days, let&#39;s hookup infiniscroll! This is part 3 of my 10 part series on Ember Problems.</p>
+<p>For this project we&#39;ll be using the projects from the <a href="http://ryanlabouve.com/ember-problems-pagination-with-api">last post</a>:</p>
+<p><style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed//v6BYu9nGz7Q' frameborder='0' allowfullscreen></iframe></div></p>
+<p>We&#39;ll be using <a href="https://github.com/hhff/ember-infinity">hhff/ember-infinity</a>. It&#39;s pleasantly customizable and looks like it will be supported through the future.</p>
+<pre><code>ember install ember-infinity
+</code></pre><p><a href="https://github.com/hhff/ember-infinity">https://github.com/hhff/ember-infinity</a>.</p>
+<h3 id="what-we-need-to-hook-it-up">What we need to hook it up</h3>
+<p>So, here&#39;s a rundown of the data we need to make this work. All of these values can be customized, but we only need to do one. Check the documentation if you need to customize more.</p>
+<table class="table-light border rounded">
+<thead class="bg-darken-1">
+<tr>
+<th>
+Variable
+</th>
+<th>
+Default
+</th>
+<th>
+From our API
+</th>
+<th>
+Direction
+</th>
+<th>
+Description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Page Size
+</td>
+<td>
+page_size
+</td>
+<td>
+page_size
+</td>
+<td>
+Sending
+</td>
+<td>
+Size of return payload
+</td>
+</tr>
+
+<tr>
+<td>
+Page
+</td>
+<td>
+page
+</td>
+<td>
+page
+</td>
+<td>
+Sending
+</td>
+<td>
+Current index in current dataset
+</td>
+</tr>
+
+<tr>
+<td>
+Page
+</td>
+<td>
+meta.total
+</td>
+<td>
+meta.pagination.totalPages
+</td>
+<td>
+Receiving
+</td>
+<td>
+Current pages, given other variables
+</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="hooking-it-up-in-our-route">Hooking it up in our route</h2>
+<p>After installing, let&#39;s hook our route up based on the documentation on <a href="https://github.com/hhff/ember-infinity">hhff/ember-infinity</a>.</p>
+<pre><code>// routes/posts.js
+import Ember from &#39;ember&#39;;
+import InfinityRoute from &quot;ember-infinity/mixins/route&quot;;
+
+export default Ember.Route.extend(InfinityRoute, {
+  totalPagesParam: &quot;meta.pagination.totalPages&quot;,    // instead of &quot;meta.total_pages&quot;
+
+  model(params) {
+    return this.infinityModel(&#39;post&#39;, {
+      perPage: 12,
+      startingPage: 1
+    });
+  }
+});
+</code></pre><h2 id="simplifying-our-controller">Simplifying our controller</h2>
+<p>Since we don&#39;t rely on interactions from our template to advance our model, we can greatly simplify our controller.</p>
+<pre><code>import Ember from &#39;ember&#39;;
+
+export default Ember.Controller.extend({
+  metaData: Ember.computed(&#39;model&#39;, function() {
+    let metadata = this.store.metadataFor(&#39;post&#39;);
+    return Ember.get(metadata, &#39;pagination&#39;);
+  }),
+});
+</code></pre><h2 id="the-template">The Template</h2>
+<p>And finally our template:</p>
+<pre><code>
+&lt;div class=&quot;clearfix&quot;&gt;
+  &lt;h1 class=&quot;border-bottom py2 center&quot;&gt;Posts ({{metaData.total}})&lt;/h1&gt;
+&lt;/div&gt;
+{{#each model as |post|}}
+  &lt;div class=&quot;p2 border-bottom uppercase&quot;&gt;
+    &lt;div class=&quot;bold&quot;&gt;{{post.title}}&lt;/div&gt;
+    &lt;p&gt;
+      {{post.body}}
+    &lt;/p&gt;
+  &lt;/div&gt;
+{{/each}}
+{{infinity-loader infinityModel=model destroyOnInfinity=true}}
+
+</code></pre><p>And :boom: it&#39;s done!</p>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <div class="clearfix mxn1">
+    <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box p3">
+        <img class="profile-pic profile-pic-sm center-block" src="../about.jpg" alt="Ryan LaBouve, Profile Pic" />
+        <h2 class="serif center">Ryan LaBouve</h2>
+        <p class="center text-primary primary">—Ember.js &amp; Node—</p>
+        <p class="h5 center">Disciple of Jesus Christ &amp; family man. Doer of JS &amp; maker of webs.</p>
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="bar brand-article">
+          <div class="btn serif italic"><span class="typcn typcn-document-text"></span> Recent Articles</div>
+        </div>
+      </div>
+      <div class="box p2">
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa-2" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-18-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-17-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/jwt-rails-api-challenge" class="h6">
+
+              JWT Rails API Challenge <div class="h6 muted right">04-12-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-infiniscroll-with-api" class="h6">
+
+              Ember Problems Infiniscroll with an... <div class="h6 muted right">09-27-15</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-pagination-with-api" class="h6">
+
+              Ember Problems, Pagination with an ... <div class="h6 muted right">09-26-15</div>
+            </a>
+            
+          </div>
+        
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="brand-rss bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-rss"></span> RSS
+          </a>
+        </div>
+        <div class="brand-twitter bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-twitter"></span> Twitter
+          </a>
+        </div>
+        <div class="brand-linkedin bar clearfix">
+          <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-linkedin"></span> LinkedIn
+          </a>
+        </div>
+        <div class="brand-github bar clearfix">
+          <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-github"></span> Github
+          </a>
+        </div>
+        <div class="brand-dribbble bar clearfix">
+          <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-dribbble"></span> Dribbble
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt4 center">
+  <a href="http://holyarchers.com">
+    <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" />
+  </a>
+</div>
+
+
+  <script src="/js/app.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71758047-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>

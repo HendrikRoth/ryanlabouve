@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ryan LaBouve</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic|Droid+Sans:400,700|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/zenburn.min.css">
+    <script src="//cdn.jsdelivr.net/highlight.js/8.8.0/highlight.min.js"></script>
+    <script src="/bower_components/zepto/zepto.min.js"></script>
+  </head>
+  <body>
+  <form class='search-form'>
+    <div class="search-bar hide">
+      <div class="container">
+        <input placeholder="SEARCH..."/>
+      </div>
+    </div>
+  </form>
+
+  <div class="mobile-menu hide md-hide close-menu">
+  <div class="clearfix px2 bar brand-menu">
+    <div class="left">
+      Menu
+    </div>
+    <div class="right bold">
+      <span class="">x</span>
+    </div>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/" class="btn">
+      Blog
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/speaking" class="btn">
+      Speaking
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/about" class="btn">
+      About
+    </a>
+  </div>
+  <div class="brand-rss bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-rss"></span> RSS
+    </a>
+  </div>
+  <div class="brand-twitter bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-twitter"></span> Twitter
+    </a>
+  </div>
+  <div class="brand-linkedin bar clearfix">
+    <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-linkedin"></span> LinkedIn
+    </a>
+  </div>
+  <div class="brand-github bar clearfix">
+    <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-github"></span> Github
+    </a>
+  </div>
+  <div class="brand-dribbble bar clearfix">
+    <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-dribbble"></span> Dribbble
+    </a>
+  </div>
+</div>
+
+  <div class="header">
+    <div class="clearfix container">
+      <a href="/" class="header__title h3 bold caps left px2">
+        <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" /> Ryan LaBouve
+      </a>
+
+      <a href="/" class="btn left serif italic md-show">
+        Blog
+      </a>
+      <a href="/speaking" class="btn left serif italic md-show">
+        Speaking
+      </a>
+      <a href="/about" class="btn left serif italic md-show">
+        About
+      </a>
+
+      <div class="right md-hide">
+        <a href="#" class="btn btn-icon btn-dark left open-menu">
+          <span class="typcn typcn-th-menu-outline"></span> Menu
+        </a>
+      </div>
+      <div class="right md-show">
+        <a href="http://twitter.com/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-twitter"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-linkedin"></span>
+        </a>
+        <a href="http://github.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-github"></span>
+        </a>
+        <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-dribbble"></span>
+        </a>
+        <a href="" class="btn btn-icon btn-dark btn-search left">
+          <span class="typcn typcn-zoom"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="container">
+    <div class="box py4 px2 sm-px4">
+      <div class="post lg-px4">
+        <div class="right primary">November 16, 2014</div>
+        <h1 class="serif">Sophisticating Your CSS</h1>
+        <ul>
+<li>CSS is our way to style the web</li>
+<li>CSS is easy to write, but hard to write well</li>
+<li>What can we do to sophisticate our CSS?</li>
+</ul>
+<p>I love quick iterations, new projects, and changing directions, but every time I switch to an old project to make changes I: a) refactor my css to keep everything from breaking or b) pump out a really hackey hotfix.</p>
+<p>I researched other people’s CSS ideas, processes and workflows. My focus was figuring out the keys to maintainable, adaptable, and portable stylesheets. These were the biggest takeaways:</p>
+<ol>
+<li>Write Consistent CSS</li>
+<li>Preprocess and Build Your CSS</li>
+<li>Strategically Name and Use Classes</li>
+<li>CSS Hat Tricks</li>
+</ol>
+<h2 id="write-consistent-css">Write Consistent CSS</h2>
+<h3 id="formatting">Formatting</h3>
+<p>Adopting a common css formatting style increases the readability of your stylesheets. This ultimately saves time working with the code, making it easier to hunt bugs and author predictably.</p>
+<p>As long as you and your team agrees and enforces a style, it really dosn’t matter what it is, as long as it’s consistent.</p>
+<p>Some examplezz:</p>
+<pre><code>    /**
+     * - Consistent Whitespace &amp; Formatting
+     * - Organization inside declaration blocks
+     * ---- Extends &amp; Includes
+     * ---- Positioning
+     * ---- Display &amp; Box Model
+     * ---- Text &amp; Styles
+     * ---- Animations, Transforms, Transitions, Other
+     * - So much more...
+    */
+    .component1,
+    .component2,
+    .component3 {
+        /* Extends &amp; Includes */
+        @extend .component;
+        @include clearfix();
+
+        /* Positioning */
+        position: relative;
+
+        /* Display &amp; Box Model */
+        padding: 1em 2em;
+        border: 1px solid #333333;
+
+        /* Text &amp; Styles */
+        font-famliy: &quot;Lucida Grande&quot;, sans-serif;
+
+        /* Animations, Transforms, Transitions, Other */
+        transition: opacity 0.1s ease-in;
+    }
+</code></pre><p>The important thing is finding a style that works for you and your team, <strong>and enforcing it ruthlessly</strong>. Here are some great resources:</p>
+<ul>
+<li><a href="https://github.com/necolas/idiomatic-css">Idiomatic CSS</a></li>
+<li><a href="http://cssguidelin.es/">CSSguidelin.es</a></li>
+<li><a href="https://github.com/timhartmann/Scss-Styleguide">timhartmann/Scss-Styleguide</a></li>
+<li><a href="https://github.com/styleguide/css">https://github.com/styleguide/css</a></li>
+</ul>
+<h3 id="organizing">Organizing</h3>
+<p>Organizing on a file system level is critical.</p>
+<p>This makes every section of CSS self-evident and minimizes CSS bloat.</p>
+<p>Again, there are a lot of potential answers here. <strong>Right</strong> answers involve consistency and simplicity. That means using the same structure on every project and breaking things into an unambiguous taxonomy.</p>
+<p>Here’s what I do:</p>
+<pre><code>application.scss
+config/
+  - ./_reset.scss
+  - ./_base.scss
+  - ./_variables.scss
+  - ./_utilities/*.scss
+  - ./_grid.scss
+elements/_element_name.scss
+blocks/_black_name.scss
+_grid.scss
+_vendor.scss
+</code></pre><h3 id="application-scss">application.scss</h3>
+<p>This file is for weaving all the other files together in order.</p>
+<pre><code>/* application.scss */
+@import &quot;_config/_variables&quot;;
+@import &quot;_config/_reset&quot;;
+@import &quot;_config/_utilities/_utilityname&quot;;
+/* list additional utilities */
+
+@import &quot;_elements/_elementname/_elementname&quot;;
+/* List additional elements */
+
+@import &quot;_blocks/_blockname/_blockname&quot;;
+/* List additional blocks */
+
+@import &quot;_vendor&quot;;
+</code></pre><h3 id="config">config</h3>
+<h4 id="base">base</h4>
+<p>Style the base elements, default link styles, etc.</p>
+<pre><code>/* _base.scss
+body { /* styles */}
+h1, h2, h3, h4 { /*styles */ }
+</code></pre><h4 id="reset">reset</h4>
+<p>This is usually either a full reset, like <a href="http://meyerweb.com/eric/tools/css/reset/">Eric Meyer Reset</a> or something based on <a href="http://necolas.github.io/normalize.css/">normalize.css</a>.</p>
+<h4 id="variables">variables</h4>
+<p>This is where I keep all the global variables. Colors, Font names, etc…</p>
+<h4 id="utilities">utilities</h4>
+<p>Utility classes like <a href="http://nicolasgallagher.com/micro-clearfix-hack/">clearfix</a>, <a href="http://nicolasgallagher.com/micro-clearfix-hack/">universal box sizing</a>, and <a href="http://hugogiraudel.com/2013/03/18/ultimate-rem-mixin/">the ultimate px/rem mixin</a>.</p>
+<h4 id="grid">grid</h4>
+<p>Grid lives here. I’ve used <a href="http://flexible.gs/">flexible.gs</a>, <a href="http://flexboxgrid.com/">Flexbox Grid</a>, the <a href="http://getbootstrap.com/css/#grid">bootstrap grid</a>, and so many more.</p>
+<h3 id="elements-_element_name">elements/_element_name</h3>
+<p>Fundamental site elements go here. Things like buttons, form element, title, images, tables, etc.</p>
+<h3 id="blocks-_black_name-scss">blocks/_black_name.scss</h3>
+<p>This is there components (as in, groups of elements) like. Things like: navbar, article, sidebar, etc.</p>
+<p><strong>!important</strong> I’d make sure to turn on <a href="http://thesassway.com/intermediate/using-source-maps-with-sass">source maps</a> to make debugging quicker</p>
+<h2 id="preprocessor-and-task-runner">Preprocessor and Task Runner</h2>
+<p>Historically I’ve used a <code>main.css</code> to avoid the initial headache of setting up a task runner. I inevitably regret this, which means a lengthy refactor or just hacking around not having the right setup.</p>
+<p>Instead, use a task runner from the beginning. That way you can use a preprocessor (SASS/SCSS/LESS/Stlus/Whatever-floats-your-boat) and automate repetitive, useful css tasks.</p>
+<h3 id="using-sass-scss-less-stylus-whatever">Using SASS/SCSS/LESS/Stylus/Whatever</h3>
+<p>Using a preprocessor offers some real advantages. Mainly:</p>
+<ul>
+<li>Variables</li>
+<li>Color functions</li>
+<li>Arithmetic</li>
+<li>Breakpoints</li>
+<li>Imports</li>
+</ul>
+<h3 id="word-of-caution">Word of Caution</h3>
+<p>Thankfully, most people now use preprocessors. This has actually turned the tide to a completely different problem.</p>
+<p>If you abuse your preprocessor, it can spit out really really terrible CSS. Avoid going crazy.</p>
+<ul>
+<li>Keep nesting 2 or 3 levels MAX.</li>
+<li>Avoid Libraries (to keep code portable)</li>
+<li>Avoid terse and fancy techniques that could lead to random code.</li>
+</ul>
+<h3 id="using-a-task-runner">Using a Task Runner</h3>
+<p>This is a massive topic unto itself. Instead of walking through too many specifics, I’ll just mention some CSS specifics worth looking into for your Grunt/Gulp/Broccli workflow:</p>
+<ul>
+<li><a href="https://github.com/CSSLint/csslint">CSS Lint</a></li>
+<li><a href="http://csscomb.com/">CSS Comb</a></li>
+<li>Autoprefix <a href="http://cognition.happycog.com/article/auto-prefix-all-the-things">(tutorial)</a></li>
+<li>LiveReload</li>
+<li>Minify</li>
+</ul>
+<h2 id="strategically-name-and-use-classes">Strategically Name and Use Classes</h2>
+<p>Though sprints, having a plan for naming classes and uses classes in CSS is a cornerstone for producing maintainable stylesheets</p>
+<p>My opinion is to use a BEM based naming convention and <a href="http://www.smashingmagazine.com/2011/12/12/an-introduction-to-object-oriented-css-oocss/">OOCSS</a> as a guide for how to use classes.</p>
+<h3 id="oocss">OOCSS</h3>
+<p>OOCSS is all about:</p>
+<h4 id="separate-structure-from-skin">Separate structure from skin</h4>
+<p>The padding, position, and spacing of an element should be independent of the presentational style.</p>
+<h4 id="separate-container-from-content">Separate container from content</h4>
+<p>Elements shouldn’t care about their containers. Breaking these dependencies allow code to be more modular and portable.</p>
+<pre><code>/* No OOCSS */
+#sidebar {
+    .btn {
+        padding: 0.2em;
+        background: #cccccc;
+        color: #333;
+    }
+}
+
+/* OOCSS */
+
+/* pull box out of it&#39;s dependency on #sidebar */
+.btn {}
+
+/* separate out presentational styles */
+.btn-default {
+    background: #cccccc;
+    color: #333;
+}
+
+.btn-error {
+    background: #da2b1e;
+    color: #ffffff;
+}
+
+/* separate out structural styles */
+.btn-padded {
+    padding: 1em;
+}
+
+.btn-padded-narrow {
+    padding: 0.2em;
+}
+</code></pre><p>Why does all this matter?</p>
+<p>Let’s say you have a page with some buttons in the sidebar.</p>
+<pre><code>&lt;!-- Pre OOCSS --&gt;
+&lt;div id=&quot;sidebar&quot;&gt;
+    &lt;a href=&quot;/&quot; class=&quot;btn&quot;&gt;
+        Home
+    &lt;/a&gt;
+&lt;/div&gt;
+&lt;div id=&quot;main&quot;&gt;
+    &lt;p&gt;
+        Lorem...
+    &lt;/p&gt;
+&lt;/div&gt;
+</code></pre><p>And now it turns out you need some larger error buttons in the <code>#main</code> section of your site. Before this would mean duplicating code. But with an OOCSS approach you can add some simple classes and reuse your base button styles.</p>
+<pre><code>&lt;!-- Pre OOCSS --&gt;
+&lt;div id=&quot;sidebar&quot;&gt;
+    &lt;a href=&quot;/&quot; class=&quot;btn btn-default btn-narrow&quot;&gt;
+        Home
+    &lt;/a&gt;
+    ...
+&lt;/div&gt;
+&lt;div id=&quot;main&quot;&gt;
+    &lt;p&gt;
+        Lorem...
+        &lt;a href=&quot;/&quot; class=&quot;btn btn-error btn-padded&quot;&gt;
+            Learn more
+        &lt;/a&gt;
+    &lt;/p&gt;
+&lt;/div&gt;
+</code></pre><p>Critics will say that this will lead to non-semantic weird HTML, which is kind of true. But the trade-off is scalable and modular CSS</p>
+<h3 id="bem">BEM</h3>
+<p>BEM is a way of crafting your CSS class names to make their function instantly evident.</p>
+<p>The syntax can look bizarre at first, but the gained self-evidence is worth it.</p>
+<p>To directly reference <a href="http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/">@csswizardry’s MindBEMding – getting your head ’round BEM syntax</a></p>
+<pre><code>/* .block represents the higher level of an abstraction or component. */
+.block {}
+
+/* .block__element represents a descendent of .block that helps form .block as a whole. */
+.block__element {}
+
+/* .block--modifier represents a different state or version of .block.*/
+.block--modifier {}
+</code></pre><p>Here’s an Oklahoma example:</p>
+<pre><code>/* [block - truck][element - dodge][modifier - engine] */
+.truck {}
+.truck__engine {}
+.truck--dodge {}
+.truck--dodge__engine {}
+</code></pre><p>Or an actual example:</p>
+<pre><code>/* [block - button][element - danger][modifier - disabled] */
+.button {}
+.button__disabled {}
+.button--danger {}
+.button--danger__disabled {}
+</code></pre><p>Use SASS and make it a little easier to write this syntax: <a href="http://mikefowler.me/2013/10/17/support-for-bem-modules-sass-3.3/">Support for BEM modules SASS</a></p>
+<p>Or use the <a href="http://docs.emmet.io/filters/bem/">Yandex BEM/OOCSS Emmet filter</a>.</p>
+<p><strong>!important</strong> Even if you don’t use BEM, just find a naming convention that works for you. The most important thing is that it’s consistent and a classes function is self-evident by the name.</p>
+<h2 id="css-hat-tricks">CSS Hat Tricks</h2>
+<p>And here’s the hard part. Being good at CSS honestly involves having a lot of tricks up your sleeves.</p>
+<p>Here an opinionated list of the most useful tricks:</p>
+<ul>
+<li><p>Don’t get fancy with you selectors. <code>.widget-title</code> is better than <code>#main header &gt; h1</code></p>
+</li>
+<li><p>Apply some classic programming principles to make your css <a href="http://blog.millermedeiros.com/solid-css/">SOLID</a></p>
+<ul>
+<li>Single Responsibility Principle — Each class should only have one responsibility</li>
+<li>Open/Closed Principle — Make extending base things easy, but hard to modify.</li>
+<li>Liskov Substitution Principle — If you have <code>.button</code>, <code>.button-danger</code>, and <code>.button-success</code>, they should all be interchangeable in your HTML without breaking your UI.</li>
+<li>Interface Segregation Principle — “many client specific interfaces are better than one general purpose interface.”</li>
+<li>Dependency Inversion Principle — Container (like <code>.container</code> elements shouldn’t depend on their children (like <code>.btn</code> or <code>.headline</code>, and child elements shouldn’t depent on their containers).</li>
+</ul>
+</li>
+<li><p>Consider <a href="http://css-tricks.com/opt-in-typography/">Opt-in Typography</a> so you don’t have to over-write a lot of article typography to style your UI components (like a navbar)</p>
+</li>
+<li><p>“Components should be standalone, reusable, and have no knowledge of their parent container” <a href="http://www.phase2technology.com/blog/used-and-abused-css-inheritance-and-our-misuse-of-the-cascade">source</a></p>
+</li>
+<li><p>Keep SASS simple. No over-nesting, clever terse tricks, or insane programatic class generation.</p>
+</li>
+<li><p>Don’t forget to actually look at the generated CSS file</p>
+</li>
+<li><p><code>.class-names</code> are more powerful and flexible than <code>#id</code>’s and basic elements (like <code>a</code>, <code>p</code>, <code>h1</code>, etc)</p>
+</li>
+<li><p>Sniper targeting things</p>
+<pre><code>/* Grenade */
+main-nav ul li ul {}
+
+/* Sniper Rifle */
+.subnav {}
+
+/* Source: http://philipwalton.com/articles/css-architecture/ */
+</code></pre></li>
+<li><p>Maintainable &gt; DRY</p>
+</li>
+<li><p>Maintainable &gt; Semantic</p>
+</li>
+</ul>
+<h2 id="additional-links">Additional Links</h2>
+<h3 id="tools">Tools</h3>
+<p><a href="http://atomeye.com/css-dig.html">CSS Dig</a><br><a href="http://csscomb.com/">CSS Comb</a><br><a href="http://csslint.net/">CSS Lint</a></p>
+<h3 id="how-other-people-do-it">How Other People Do It</h3>
+<p><a href="http://css-tricks.com/sass-style-guide/">CSS-Tricks: Sass Style Guide</a><br><a href="https://github.com/styleguide/css">Github CSS Style Guide</a><br><a href="http://markdotto.com/2014/07/23/githubs-css/">@mdo on Github’s CSS</a><br><a href="http://ianfeather.co.uk/css-at-lonely-planet/">CSS at Lonely Planet</a><br><a href="http://dev.ghost.org/css-at-ghost/">How we do CSS at Ghost</a><br><a href="https://medium.com/@fat/mediums-css-is-actually-pretty-fucking-good-b8e2a6c78b06">Medium’s CSS is Actually pretty <em>**</em>ing good.</a><br><a href="http://codepen.io/chriscoyier/blog/codepens-css">Codepen’s CSS</a></p>
+<h3 id="other-links">Other Links</h3>
+<p><a href="https://github.com/davidtheclark/scalable-css-reading-list">Scalable CSS Reading List by David Clark</a><br><a href="http://benfrain.com/enduring-css-writing-style-sheets-rapidly-changing-long-lived-projects">Ben Frain: Enduring CSS</a><br><a href="https://www.youtube.com/watch?v=ZpFdyfs03Ug">Andy Hume: CSS for Grownups</a></p>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <div class="clearfix mxn1">
+    <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box p3">
+        <img class="profile-pic profile-pic-sm center-block" src="../about.jpg" alt="Ryan LaBouve, Profile Pic" />
+        <h2 class="serif center">Ryan LaBouve</h2>
+        <p class="center text-primary primary">—Ember.js &amp; Node—</p>
+        <p class="h5 center">Disciple of Jesus Christ &amp; family man. Doer of JS &amp; maker of webs.</p>
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="bar brand-article">
+          <div class="btn serif italic"><span class="typcn typcn-document-text"></span> Recent Articles</div>
+        </div>
+      </div>
+      <div class="box p2">
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa-2" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-18-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-17-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/jwt-rails-api-challenge" class="h6">
+
+              JWT Rails API Challenge <div class="h6 muted right">04-12-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-infiniscroll-with-api" class="h6">
+
+              Ember Problems Infiniscroll with an... <div class="h6 muted right">09-27-15</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-pagination-with-api" class="h6">
+
+              Ember Problems, Pagination with an ... <div class="h6 muted right">09-26-15</div>
+            </a>
+            
+          </div>
+        
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="brand-rss bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-rss"></span> RSS
+          </a>
+        </div>
+        <div class="brand-twitter bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-twitter"></span> Twitter
+          </a>
+        </div>
+        <div class="brand-linkedin bar clearfix">
+          <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-linkedin"></span> LinkedIn
+          </a>
+        </div>
+        <div class="brand-github bar clearfix">
+          <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-github"></span> Github
+          </a>
+        </div>
+        <div class="brand-dribbble bar clearfix">
+          <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-dribbble"></span> Dribbble
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt4 center">
+  <a href="http://holyarchers.com">
+    <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" />
+  </a>
+</div>
+
+
+  <script src="/js/app.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71758047-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>

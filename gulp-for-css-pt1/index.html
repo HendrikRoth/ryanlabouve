@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ryan LaBouve</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic|Droid+Sans:400,700|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/zenburn.min.css">
+    <script src="//cdn.jsdelivr.net/highlight.js/8.8.0/highlight.min.js"></script>
+    <script src="/bower_components/zepto/zepto.min.js"></script>
+  </head>
+  <body>
+  <form class='search-form'>
+    <div class="search-bar hide">
+      <div class="container">
+        <input placeholder="SEARCH..."/>
+      </div>
+    </div>
+  </form>
+
+  <div class="mobile-menu hide md-hide close-menu">
+  <div class="clearfix px2 bar brand-menu">
+    <div class="left">
+      Menu
+    </div>
+    <div class="right bold">
+      <span class="">x</span>
+    </div>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/" class="btn">
+      Blog
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/speaking" class="btn">
+      Speaking
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/about" class="btn">
+      About
+    </a>
+  </div>
+  <div class="brand-rss bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-rss"></span> RSS
+    </a>
+  </div>
+  <div class="brand-twitter bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-twitter"></span> Twitter
+    </a>
+  </div>
+  <div class="brand-linkedin bar clearfix">
+    <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-linkedin"></span> LinkedIn
+    </a>
+  </div>
+  <div class="brand-github bar clearfix">
+    <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-github"></span> Github
+    </a>
+  </div>
+  <div class="brand-dribbble bar clearfix">
+    <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-dribbble"></span> Dribbble
+    </a>
+  </div>
+</div>
+
+  <div class="header">
+    <div class="clearfix container">
+      <a href="/" class="header__title h3 bold caps left px2">
+        <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" /> Ryan LaBouve
+      </a>
+
+      <a href="/" class="btn left serif italic md-show">
+        Blog
+      </a>
+      <a href="/speaking" class="btn left serif italic md-show">
+        Speaking
+      </a>
+      <a href="/about" class="btn left serif italic md-show">
+        About
+      </a>
+
+      <div class="right md-hide">
+        <a href="#" class="btn btn-icon btn-dark left open-menu">
+          <span class="typcn typcn-th-menu-outline"></span> Menu
+        </a>
+      </div>
+      <div class="right md-show">
+        <a href="http://twitter.com/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-twitter"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-linkedin"></span>
+        </a>
+        <a href="http://github.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-github"></span>
+        </a>
+        <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-dribbble"></span>
+        </a>
+        <a href="" class="btn btn-icon btn-dark btn-search left">
+          <span class="typcn typcn-zoom"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="container">
+    <div class="box py4 px2 sm-px4">
+      <div class="post lg-px4">
+        <div class="right primary">November 24, 2014</div>
+        <h1 class="serif">Gulp for CSS: Up and Running</h1>
+        <ul>
+<li>Setting up Gulp</li>
+<li>Separate authoring stylesheets from production stylesheets</li>
+<li>Automating Some Basic SASS things</li>
+</ul>
+<p>I <a href="http://ryanlabouve.com/sophisticating-your-css/">recently evangelized</a> using a task runner as a necessity in your front-end workflow.</p>
+<p>The focus of this series it to show you, step by step, how to start working with task runners (in our case, gulp).</p>
+<p>We are going to follow through the whole process, just like I was writing it from scratch.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>This may seem technical if you have limited experience with terminal, but I’ve made it as easy as possible to follow along.</p>
+<p>Also, if you prefer a different preprocessor, like Less or Stylus, the setup is very similar. You’ll just have to look at <a href="https://github.com/plus3network/gulp-less">gulp-less</a> or <a href="https://github.com/stevelacy/gulp-stylus">gulp-stylus</a> when I start talking about sass.</p>
+<ul>
+<li><a href="http://sass-lang.com/install">Install SASS</a></li>
+<li><a href="http://nodejs.org/">Install Node</a></li>
+<li>Have a basic understanding of <a href="http://code.tutsplus.com/tutorials/the-command-line-is-your-best-friend--net-30362">terminal</a></li>
+</ul>
+<h2 id="what-is-gulp">What is Gulp</h2>
+<p>Gulp is simply a way to take the code we author and transform it with other programs. This can allow us to do everything from minification to code linting.</p>
+<h3 id="streams">Streams</h3>
+<p>All we are doing with gulp is loading up a series of files into a data stream, passing that stream through different programs… from input to output, modifying the stream as we go to suit our goals.</p>
+<h3 id="the-five-big-functions">The Five Big Functions</h3>
+<p>There’s not a lot to Gulp:</p>
+<ul>
+<li><strong>gulp.task(name, fn)</strong> registers a task</li>
+<li><strong>gulp.run(tasks…)</strong> runs tasks</li>
+<li><strong>gulp.watch(glob,fn)</strong> runs tasks when files change</li>
+<li><strong>gulp.src(glob)</strong> turns your files into streams</li>
+<li><strong>gulp.dest(folder)</strong> writes stream to file system</li>
+</ul>
+<p>That’s it. Now let’s write some gulp.</p>
+<h2 id="setting-up-project">Setting up Project</h2>
+<p>I’ve set up some basic html, css, and javascript if you want to follow along: <a href="https://github.com/ryanlabouve/gulp-for-css/releases/tag/v0.1">ryanlabouve/gulp-for-css, v0.1</a>. Or feel free to try along with one of your own projects.</p>
+<p>First, <code>cd</code> into the root of the project directory, initialize npm, and install gulp.</p>
+<pre><code>npm init
+npm install --save-dev gulp
+npm install --save-dev gulp-util
+</code></pre><p>This has generated a basic package.json file, and added gulp and gulp-util as dependencies.</p>
+<p>Note that the <code>--save-dev</code> actually adds our dependencies to the <code>package.json</code> file.</p>
+<h2 id="gulpfile">Gulpfile</h2>
+<p>Now let’s work on the our <code>gulpfile.js</code>.</p>
+<pre><code>touch gulpfile.js
+</code></pre><p>Require gulp, setup a default task, and then run <code>gulp</code> to make sure everything’s setup.</p>
+<pre><code>// gulpfile.js
+
+var gulp = require(&#39;gulp&#39;);
+var gutil = require(&#39;gulp-util&#39;);
+
+gulp.task(&#39;default&#39;, function() {
+    gutil.log(&quot;Running Gulp!&quot;);
+});
+</code></pre><p>If we run <code>gulp</code> in our terminal we will see “Runing gulp!”.</p>
+<p><a href="https://github.com/ryanlabouve/gulp-for-css/releases/tag/v0.2">ryanlabouve/gulp-for-css, v0.2</a></p>
+<p><img src="../posts/2014-11-24-gulp-for-css-pt1/gulp-initial-run.png" alt="Gulp Running with message &quot;Running Gulp&quot;"></p>
+<h2 id="server">Server</h2>
+<p>Now let’s setup a local server for our project.</p>
+<p>This will make several things easier (like connecting to external services and resources).</p>
+<pre><code>npm install gulp-connect --save-dev
+</code></pre><p>For our gulpfile we’ll add new new task called <code>connnect</code> that uses <a href="https://www.npmjs.org/package/gulp-connect">gulp-connect</a> to start a server and add the new <code>connect</code> to run in our <code>default</code> task.</p>
+<p>Again, for every plugin, we’ll have to require it at the top so we can use it in our gulpfile <code>var connect = require(&#39;gulp-connect&#39;);</code>… and then later <code>connect.server</code>…</p>
+<pre><code>// gulpfile.js
+// requires...
+var connect = require(&#39;gulp-connect&#39;);
+
+gulp.task(&#39;connect&#39;, function() {
+    connect.server({
+        port: 8989,
+        livereload: true
+    });
+});
+
+gulp.task(&#39;default&#39;, [&#39;connect&#39;]);
+</code></pre><p>Now when we run <code>gulp</code>, and then navigate to <strong><a href="http://localhost:8989">http://localhost:8989</a></strong> we see our project running in the browser.</p>
+<p>Please note, on all of the gulp plugins I’m using I’ll link to the <a href="https://github.com/avevlad/gulp-connect">documentation</a>, which will have further instructions on how to customize how we run the plugins.</p>
+<p><a href="https://github.com/ryanlabouve/gulp-for-css/releases/tag/v0.3">ryanlabouve/gulp-for-css, v0.3</a></p>
+<h2 id="sass">SASS</h2>
+<p>Let’s get SASS wired up now.</p>
+<p>We’re going to be using the <a href="https://github.com/sindresorhus/gulp-ruby-sass/tree/rw/1.0">gulp-ruby-sass</a> plugin to compile our SASS.</p>
+<p><strong>!important</strong> We are actually going to run an alpha version of the sass plugin. If you want to read more about that, <a href="https://github.com/sindresorhus/gulp-ruby-sass/pull/137">here you go</a>.</p>
+<p><strong>!important</strong> We are also going to turn on sourcemaps for our sass while we are here. It makes <a href="http://snugug.com/musings/debugging-sass-source-maps">debugging sass</a> much easier.</p>
+<p><code>npm install --save-dev gulp-ruby-sass@1.0.0-alpha</code><br><code>npm install gulp-sourcemaps --save-dev</code></p>
+<p>Now I’m going to move all of the existing <code>/css</code> into <code>/scss</code> and changing the extension to <code>.scss</code>. (I’ll add a few sass variables too, so we can show the compiler is working).</p>
+<p>Now, let’s add a gulp task and configure it to work:</p>
+<p>We’ll require <code>gulp-ruby-sass</code>, make a new task called <code>sass</code>,</p>
+<pre><code>// gulpfile.js
+//... requires
+var sass = require(&#39;gulp-ruby-sass&#39;);
+var sourcemaps = require(&#39;gulp-sourcemaps&#39;);
+
+gulp.task(&#39;sass&#39;, function() {
+    return sass(&#39;scss/app.scss&#39;, {
+        &#39;sourcemap&#39;: true,
+        &#39;style&#39;: &#39;expanded&#39;,
+        &#39;lineNumbers&#39;: true
+    })
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest(&#39;css&#39;));
+});
+
+//... rest of the tasks
+</code></pre><p>Now when we run <code>gulp sass</code> and check the <code>/css</code> directory we see that our sass has compiled successfully.</p>
+<p><strong>!imoprtant</strong> Note that we can pass any source into for the sass function to process and any destination into <code>gulp.dest</code> for it to write out to. Try changing to <code>pipe(gulp.dest(&#39;dist/css&#39;));</code> and see how you can mold gulp to store your projects however suits you.</p>
+<p><strong>checkpoint:</strong> <a href="https://github.com/ryanlabouve/gulp-for-css/releases/tag/v0.4">ryanlabouve/gulp-for-css</a></p>
+<h2 id="tying-it-all-together-with-watch">Tying it All Together with Watch</h2>
+<p>Currently we have to <code>gulp sass</code> after every change we made.</p>
+<p>Instead, let’s have our server running and our sass compiling at the same time, as well as livereload-ing our pages every time we make a change</p>
+<h3 id="gulp-watch-livereload">gulp.watch + livereload</h3>
+<p>The watch task is really easy. We are simply watching a glob of file (i.e. ‘*<em>/</em>.scss’, or, everything in the scss folder) for a change, and then running a task if we detect a change.</p>
+<pre><code>gulp.task(&#39;watch&#39;, function() {
+    gulp.watch(&#39;**/*.scss&#39;, [&#39;sass&#39;]);
+});
+</code></pre><p>Next we’ll expand our default task to: run <code>sass</code> immediately when we start gulp, start the local server with <code>connect</code>, and finally set gulp to keep <code>watch</code>ing for changes.</p>
+<pre><code>gulp.task(&#39;default&#39;, [&#39;sass&#39;, &#39;connect&#39;, &#39;watch]);
+</code></pre><p>Finally, we’ll add one line to the end of our <code>sass</code> task to tell livereload to trigger after we run <code>sass</code>.</p>
+<pre><code>.pipe(connect.reload());
+</code></pre><h3 id="the-full-gulpfile">The Full Gulpfile</h3>
+<p>Here’s the full gulpfile, in all of its glory!</p>
+<p><a href="https://github.com/ryanlabouve/gulp-for-css/releases/tag/v0.5">ryanlabouve/gulp-for-css,v5.0</a></p>
+<pre><code>// gulpfile.js
+var gulp = require(&#39;gulp&#39;);
+var gutil = require(&#39;gulp-util&#39;);
+var connect = require(&#39;gulp-connect&#39;);
+var sass = require(&#39;gulp-ruby-sass&#39;);
+var sourcemaps = require(&#39;gulp-sourcemaps&#39;);
+
+gulp.task(&#39;sass&#39;, function() {
+    return sass(&#39;scss/app.scss&#39;, {
+        &#39;sourcemap&#39;: true,
+        &#39;style&#39;: &#39;expanded&#39;,
+        &#39;lineNumbers&#39;: true
+    })
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest(&#39;css&#39;))
+    .pipe(connect.reload());
+});
+
+gulp.task(&#39;connect&#39;, function() {
+    connect.server({
+        port: 8989,
+        livereload: true
+    });
+});
+
+gulp.task(&#39;watch&#39;, function() {
+    gulp.watch(&#39;**/*.scss&#39;, [&#39;sass&#39;]);
+});
+
+gulp.task(&#39;default&#39;, [&#39;sass&#39;, &#39;connect&#39;, &#39;watch&#39;]);
+</code></pre><p>Sweet! Let’s review what we’ve done</p>
+<ul>
+<li>Compile SASS on the Fly</li>
+<li>Live reload changes</li>
+<li>Setup local server to run project</li>
+</ul>
+<h3 id="next-time">Next Time</h3>
+<p>Next time, in part two, we’ll look at how to have different stylesheet builds for development stylesheets and production stylesheets.</p>
+<h3 id="additional-gulp-resources-">Additional gulp resources:</h3>
+<ul>
+<li><a href="https://github.com/gulpjs/gulp/blob/master/docs/README.md">https://github.com/gulpjs/gulp/blob/master/docs/README.md</a></li>
+<li><a href="http://slides.com/contra/gulp">http://slides.com/contra/gulp</a></li>
+<li><a href="https://github.com/osscafe/gulp-cheatsheet">https://github.com/osscafe/gulp-cheatsheet</a></li>
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <div class="clearfix mxn1">
+    <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box p3">
+        <img class="profile-pic profile-pic-sm center-block" src="../about.jpg" alt="Ryan LaBouve, Profile Pic" />
+        <h2 class="serif center">Ryan LaBouve</h2>
+        <p class="center text-primary primary">—Ember.js &amp; Node—</p>
+        <p class="h5 center">Disciple of Jesus Christ &amp; family man. Doer of JS &amp; maker of webs.</p>
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="bar brand-article">
+          <div class="btn serif italic"><span class="typcn typcn-document-text"></span> Recent Articles</div>
+        </div>
+      </div>
+      <div class="box p2">
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa-2" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-18-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-17-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/jwt-rails-api-challenge" class="h6">
+
+              JWT Rails API Challenge <div class="h6 muted right">04-12-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-infiniscroll-with-api" class="h6">
+
+              Ember Problems Infiniscroll with an... <div class="h6 muted right">09-27-15</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-pagination-with-api" class="h6">
+
+              Ember Problems, Pagination with an ... <div class="h6 muted right">09-26-15</div>
+            </a>
+            
+          </div>
+        
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="brand-rss bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-rss"></span> RSS
+          </a>
+        </div>
+        <div class="brand-twitter bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-twitter"></span> Twitter
+          </a>
+        </div>
+        <div class="brand-linkedin bar clearfix">
+          <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-linkedin"></span> LinkedIn
+          </a>
+        </div>
+        <div class="brand-github bar clearfix">
+          <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-github"></span> Github
+          </a>
+        </div>
+        <div class="brand-dribbble bar clearfix">
+          <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-dribbble"></span> Dribbble
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt4 center">
+  <a href="http://holyarchers.com">
+    <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" />
+  </a>
+</div>
+
+
+  <script src="/js/app.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71758047-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>

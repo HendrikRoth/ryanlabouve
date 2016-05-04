@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ryan LaBouve</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic|Droid+Sans:400,700|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/zenburn.min.css">
+    <script src="//cdn.jsdelivr.net/highlight.js/8.8.0/highlight.min.js"></script>
+    <script src="/bower_components/zepto/zepto.min.js"></script>
+  </head>
+  <body>
+  <form class='search-form'>
+    <div class="search-bar hide">
+      <div class="container">
+        <input placeholder="SEARCH..."/>
+      </div>
+    </div>
+  </form>
+
+  <div class="mobile-menu hide md-hide close-menu">
+  <div class="clearfix px2 bar brand-menu">
+    <div class="left">
+      Menu
+    </div>
+    <div class="right bold">
+      <span class="">x</span>
+    </div>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/" class="btn">
+      Blog
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/speaking" class="btn">
+      Speaking
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/about" class="btn">
+      About
+    </a>
+  </div>
+  <div class="brand-rss bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-rss"></span> RSS
+    </a>
+  </div>
+  <div class="brand-twitter bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-twitter"></span> Twitter
+    </a>
+  </div>
+  <div class="brand-linkedin bar clearfix">
+    <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-linkedin"></span> LinkedIn
+    </a>
+  </div>
+  <div class="brand-github bar clearfix">
+    <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-github"></span> Github
+    </a>
+  </div>
+  <div class="brand-dribbble bar clearfix">
+    <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-dribbble"></span> Dribbble
+    </a>
+  </div>
+</div>
+
+  <div class="header">
+    <div class="clearfix container">
+      <a href="/" class="header__title h3 bold caps left px2">
+        <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" /> Ryan LaBouve
+      </a>
+
+      <a href="/" class="btn left serif italic md-show">
+        Blog
+      </a>
+      <a href="/speaking" class="btn left serif italic md-show">
+        Speaking
+      </a>
+      <a href="/about" class="btn left serif italic md-show">
+        About
+      </a>
+
+      <div class="right md-hide">
+        <a href="#" class="btn btn-icon btn-dark left open-menu">
+          <span class="typcn typcn-th-menu-outline"></span> Menu
+        </a>
+      </div>
+      <div class="right md-show">
+        <a href="http://twitter.com/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-twitter"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-linkedin"></span>
+        </a>
+        <a href="http://github.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-github"></span>
+        </a>
+        <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-dribbble"></span>
+        </a>
+        <a href="" class="btn btn-icon btn-dark btn-search left">
+          <span class="typcn typcn-zoom"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="container">
+    <div class="box py4 px2 sm-px4">
+      <div class="post lg-px4">
+        <div class="right primary">September 26, 2015</div>
+        <h1 class="serif">Ember Problems, Pagination with an API</h1>
+        <p>Ember Project: <a href="https://github.com/ryanlabouve/toy-blog">https://github.com/ryanlabouve/toy-blog</a></p>
+<p>Rails Project: <a href="https://github.com/ryanlabouve/toy-blog-api">https://github.com/ryanlabouve/toy-blog-api</a></p>
+<p><style>.embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; } .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }</style><div class='embed-container'><iframe src='https://www.youtube.com/embed//OJWH-BxNZdo' frameborder='0' allowfullscreen></iframe></div></p>
+<h2 id="jumpstart-the-api">Jumpstart the API</h2>
+<p>(If you want to know more about how this is setup, check Ember Problems Episode 1.)</p>
+<p>Go ahead and clone up our play API. It&#39;s very similar to Episode 1... go ahead and checkout <code>v0.0.1</code> if you want to follow along.</p>
+<pre><code>git clone https://github.com/ryanlabouve/toy-blog-api
+cd toy-blog-api
+bin/rake db:migrate
+git checkout tags/v0.0.1
+bundle
+bin/rake db:seeds
+rails s
+</code></pre><p>You should see posts here: <code>localhost:3000/posts</code></p>
+<p>And, if you wanna do a little investigation:</p>
+<pre><code>rails c
+Post.all.length # =&gt; 2000
+</code></pre><h3 id="connect-to-the-api">Connect to The API</h3>
+<p>Let&#39;s brew up a new ember project for our api. Or, if you would prefer to clone and follow along that way: ryanlabouve/toy-blog</p>
+<pre><code>ember new toy-blog
+
+// Get the adapter stuff rolling
+ember install active-model-adapter
+ember generate adapter application
+</code></pre><p>And then hook it up to the rails api.</p>
+<pre><code>// adapters/application.js
+import ActiveModelAdapter from &#39;active-model-adapter&#39;;
+
+export default ActiveModelAdapter.extend({
+  host: &#39;http://localhost:3000/&#39;
+});
+</code></pre><p>Go ahead and generate a model and route for out posts so we can see some magic:</p>
+<pre><code>ember g model post
+ember g route posts
+</code></pre><p>Set some basic data about our post in the model. All of these fields were previously generated for our API. Checkout the Api <code>db/seeds.rb</code> for more details.</p>
+<pre><code>// models/post.js
+import DS from &#39;ember-data&#39;;
+
+export default DS.Model.extend({
+  title: DS.attr(&#39;string&#39;),
+  body: DS.attr(&#39;string&#39;),
+  isDraft: DS.attr(&#39;boolean&#39;),
+  createdAt: DS.attr(&#39;date&#39;)
+});
+</code></pre><p>And then the routes to actually load the data from the Api.</p>
+<pre><code>// route/posts.js
+import Ember from &#39;ember&#39;;
+
+export default Ember.Route.extend({
+  model() {
+    // This uses our adapter connection and
+    // the post model to form the query
+    return this.store.find(&#39;post&#39;);
+  }
+});
+</code></pre><p>And finally the template:</p>
+<pre><code>
+{{! templates/posts.hbs }}
+&lt;div class=&quot;clearfix&quot;&gt;
+  &lt;h1 class=&quot;border-bottom py2 center&quot;&gt;Posts ({{model.length}})&lt;/h1&gt;
+&lt;/div&gt;
+{{#each model as |post|}}
+  &lt;div class=&quot;p2 border-bottom uppercase&quot;&gt;
+    &lt;div class=&quot;bold&quot;&gt;{{post.title}}&lt;/div&gt;
+    &lt;p&gt;
+      {{post.body}}
+    &lt;/p&gt;
+  &lt;/div&gt;
+{{/each}}
+
+</code></pre><p>Now we are setup and throwing out 2000 posts on every load. Cool! Let&#39;s paginate.</p>
+<h2 id="on-to-pagination">On to Pagination</h2>
+<h3 id="step-1-api">Step 1: API</h3>
+<p>Instead of one large payload, we&#39;ll break it up into smaller indexed chunks. This means that data can load substantially faster, but there has to be an additional layer of logic to manage navigating these chunks.</p>
+<p>There are many ways paginate an API... We&#39;ll be adding  a &#39;meta&#39; object, in additional to our root &#39;post&#39; object, where we&#39;ll store meta data about the pagination, like what page we&#39;re on and how many results are coming back at one time.</p>
+<h3 id="adding-kaminari">Adding Kaminari</h3>
+<p>To simplify break our results into chunks we&#39;ll use a gem called <a href="#">kaminari</a>.</p>
+<blockquote>
+<p>Kaminari is a &quot;sophisticated paginator for modern web app frameworks and ORMs&quot;. Let&#39;s go ahead and see what this does in <code>rails console</code>.</p>
+</blockquote>
+<pre><code># ...
+gem &#39;kaminari&#39;
+# ...
+</code></pre><p>Let&#39;s see what this does: </p>
+<pre><code># inside rails console
+Post.all.length # =&gt; 2000
+Post.page(1).per(10).length # =&gt; 10
+Post.page(1).per(10) # look at results in console
+Post.page(2).per(10).length # =&gt; 10
+Post.page(2).per(10) # =&gt; # look at results in console
+</code></pre><h3 id="kaminari-in-our-post-controller">Kaminari in Our Post Controller</h3>
+<p>Using this we can fragment our results instead of listing them all in one return. To move around the whole collection, we&#39;ll use query parameters (e.g. <code>?page=2</code>).</p>
+<p>First, let&#39;s chop up our results from our controller.</p>
+<pre><code>class PostsController &lt; ApplicationController
+  # ...
+  def index
+    page_info = {
+      page: params[:page] || 1,
+      per_page: params[:per_page] || 5
+    }
+    @posts = Post.page(page_info[:page]).per(page_info[:per_page])
+
+    render json: @posts, params: page_info
+  end
+
+  #  ... Other methods
+end
+</code></pre><p>Now restart all the things and refresh your Ember app. Only showing 5 Posts!</p>
+<p>If we look at <a href="http://localhost:3000/posts">http://localhost:3000/posts</a>, we&#39;ll see that instead of 2000 results we&#39;re just getting back 5. And if we change the url to <a href="http://localhost:3000/posts?page=3">http://localhost:3000/posts?page=3</a>, we&#39;ll see a completely different set of <code>posts</code></p>
+<p>From the front-end, we now have some problems:</p>
+<ul>
+<li>How do we navigate to these different URLs? (because currently it does not)</li>
+<li>How can we correct &quot;total posts&quot;?</li>
+</ul>
+<h3 id="the-meta-key">The Meta Key</h3>
+<p>Adding The Meta Key in Our Serializer will help us fix most of these issues. It allows us to peek outside the actual payload and look at details we return about the larger collection.</p>
+<pre><code>class PostSerializer &lt; ActiveModel::Serializer
+  attributes :id, :id, :title, :body, :is_draft, :created_at
+
+  def initialize(object, options={})
+
+    meta_key = options[:meta_key] || :meta
+    options[meta_key] ||= {}
+
+    options[meta_key][:pagination] = {
+      page: options[:params][:page].to_i,
+      perPage: options[:params][:per_page],
+      totalPages: (Post.all.size/options[:params][:per_page].to_f)
+    }
+
+    super(object, options)
+  end
+end
+</code></pre><p>See <a href="http://stackoverflow.com/questions/22947721/rails-active-model-serializer-with-pagination">this stack overflow</a> for a little more discussion on what just happened. There are better ways to do it, but this is simple and good enough for us.</p>
+<p>Now if we refersh <code>http://localhost:3000/posts</code> we&#39;ll see our data with an appropriate meta key.</p>
+<p>Armed with this meta data and a hook to navigate around, we have what we need to jump back into ember and hook up pagination.</p>
+<h2 id="pagination-in-ember">Pagination in Ember</h2>
+<p>Update our route to query and refresh model when changes.
+<a href="http://guides.emberjs.com/v1.10.0/routing/query-params/#toc_opting-into-a-full-transition">http://guides.emberjs.com/v1.10.0/routing/query-params/#toc_opting-into-a-full-transition</a></p>
+<pre><code>import Ember from &#39;ember&#39;;
+
+export default Ember.Route.extend({
+  queryParams: {
+    page: {
+      refreshModel: true
+    }
+  },
+  model(params) {
+    return this.store.findQuery(&#39;post&#39;, params);
+  }
+});
+</code></pre><p>Update our controller to handle query params:</p>
+<pre><code>import Ember from &#39;ember&#39;;
+
+export default Ember.Controller.extend({
+  queryParams: [
+    &#39;page&#39;,
+  ],
+  page: 1,
+  metaData: Ember.computed(&#39;model&#39;, function() {
+    let metadata = this.store.metadataFor(&#39;post&#39;);
+    return Ember.get(metadata, &#39;pagination&#39;);
+  }),
+
+  # We&#39;re not doing any logic here to manage
+  # when we are out of pages
+  actions: {
+    nextPage() {
+      let page = this.get(&#39;page&#39;);
+      this.set(&#39;page&#39;, page + 1);
+    },
+
+    prevPage() {
+      this.set(&#39;page&#39;, this.get(&#39;page&#39;) - 1);
+    }
+  }
+});
+</code></pre><p>And just so we can see what&#39;s going on, let&#39;s expose that Metadata in the template.</p>
+<pre><code>
+&lt;div class=&quot;clearfix&quot;&gt;
+  &lt;a href=&quot;#&quot; class=&quot;left btn&quot; {{action &quot;prevPage&quot;}}&gt;&amp;lt; Prev&lt;/a&gt;
+  &lt;a href=&quot;#&quot; class=&quot;right btn&quot; {{action &quot;nextPage&quot;}}&gt;Next &amp;gt;&lt;/a&gt;
+  &lt;h1 class=&quot;border-bottom py2 center&quot;&gt;Posts ({{metaData.total}})&lt;/h1&gt;
+  pages: {{metaData.page}} / {{metaData.totalPages}}&lt;br&gt;
+&lt;/div&gt;
+{{#each model as |post|}}
+  &lt;div class=&quot;p2 border-bottom uppercase&quot;&gt;
+    &lt;div class=&quot;bold&quot;&gt;{{post.title}}&lt;/div&gt;
+    &lt;p&gt;
+      {{post.body}}
+    &lt;/p&gt;
+  &lt;/div&gt;
+{{/each}}
+
+</code></pre><p>Next time, we&#39;ll look at how to infiniscroll!</p>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <div class="clearfix mxn1">
+    <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box p3">
+        <img class="profile-pic profile-pic-sm center-block" src="../about.jpg" alt="Ryan LaBouve, Profile Pic" />
+        <h2 class="serif center">Ryan LaBouve</h2>
+        <p class="center text-primary primary">—Ember.js &amp; Node—</p>
+        <p class="h5 center">Disciple of Jesus Christ &amp; family man. Doer of JS &amp; maker of webs.</p>
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="bar brand-article">
+          <div class="btn serif italic"><span class="typcn typcn-document-text"></span> Recent Articles</div>
+        </div>
+      </div>
+      <div class="box p2">
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa-2" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-18-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-17-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/jwt-rails-api-challenge" class="h6">
+
+              JWT Rails API Challenge <div class="h6 muted right">04-12-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-infiniscroll-with-api" class="h6">
+
+              Ember Problems Infiniscroll with an... <div class="h6 muted right">09-27-15</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-pagination-with-api" class="h6">
+
+              Ember Problems, Pagination with an ... <div class="h6 muted right">09-26-15</div>
+            </a>
+            
+          </div>
+        
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="brand-rss bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-rss"></span> RSS
+          </a>
+        </div>
+        <div class="brand-twitter bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-twitter"></span> Twitter
+          </a>
+        </div>
+        <div class="brand-linkedin bar clearfix">
+          <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-linkedin"></span> LinkedIn
+          </a>
+        </div>
+        <div class="brand-github bar clearfix">
+          <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-github"></span> Github
+          </a>
+        </div>
+        <div class="brand-dribbble bar clearfix">
+          <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-dribbble"></span> Dribbble
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt4 center">
+  <a href="http://holyarchers.com">
+    <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" />
+  </a>
+</div>
+
+
+  <script src="/js/app.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71758047-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ryan LaBouve</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic|Droid+Sans:400,700|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/zenburn.min.css">
+    <script src="//cdn.jsdelivr.net/highlight.js/8.8.0/highlight.min.js"></script>
+    <script src="/bower_components/zepto/zepto.min.js"></script>
+  </head>
+  <body>
+  <form class='search-form'>
+    <div class="search-bar hide">
+      <div class="container">
+        <input placeholder="SEARCH..."/>
+      </div>
+    </div>
+  </form>
+
+  <div class="mobile-menu hide md-hide close-menu">
+  <div class="clearfix px2 bar brand-menu">
+    <div class="left">
+      Menu
+    </div>
+    <div class="right bold">
+      <span class="">x</span>
+    </div>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/" class="btn">
+      Blog
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/speaking" class="btn">
+      Speaking
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/about" class="btn">
+      About
+    </a>
+  </div>
+  <div class="brand-rss bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-rss"></span> RSS
+    </a>
+  </div>
+  <div class="brand-twitter bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-twitter"></span> Twitter
+    </a>
+  </div>
+  <div class="brand-linkedin bar clearfix">
+    <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-linkedin"></span> LinkedIn
+    </a>
+  </div>
+  <div class="brand-github bar clearfix">
+    <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-github"></span> Github
+    </a>
+  </div>
+  <div class="brand-dribbble bar clearfix">
+    <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-dribbble"></span> Dribbble
+    </a>
+  </div>
+</div>
+
+  <div class="header">
+    <div class="clearfix container">
+      <a href="/" class="header__title h3 bold caps left px2">
+        <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" /> Ryan LaBouve
+      </a>
+
+      <a href="/" class="btn left serif italic md-show">
+        Blog
+      </a>
+      <a href="/speaking" class="btn left serif italic md-show">
+        Speaking
+      </a>
+      <a href="/about" class="btn left serif italic md-show">
+        About
+      </a>
+
+      <div class="right md-hide">
+        <a href="#" class="btn btn-icon btn-dark left open-menu">
+          <span class="typcn typcn-th-menu-outline"></span> Menu
+        </a>
+      </div>
+      <div class="right md-show">
+        <a href="http://twitter.com/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-twitter"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-linkedin"></span>
+        </a>
+        <a href="http://github.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-github"></span>
+        </a>
+        <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-dribbble"></span>
+        </a>
+        <a href="" class="btn btn-icon btn-dark btn-search left">
+          <span class="typcn typcn-zoom"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="container">
+    <div class="box py4 px2 sm-px4">
+      <div class="post lg-px4">
+        <div class="right primary">April 17, 2016</div>
+        <h1 class="serif">Ember Blog with JWT and Ember Simple Auth, Part 1</h1>
+        <p>
+Goal:</p>
+<blockquote>
+<p>Serve an API backed blog with Public (available to everyone) and Private posts (have to log in to see).</p>
+</blockquote>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa-2/final-product-anno.jpg" alt="Final Product"></p>
+<p>We are going to go through the full process for doing this project, including seting up Mirage and Testing our way through. Follow along below or grab the <a href="https://github.com/ryanlabouve/ember-jwt-esa-blog">code on github</a>.</p>
+<pre><code>ember new ember-jwt-esa-blog`
+</code></pre><h5 id="notes-">Notes:</h5>
+<ul>
+<li>We&#39;ll be using <a href="https://github.com/simplabs/ember-simple-auth">Ember Simple Auth</a> for authentication</li>
+<li>Our API was built in <a href="http://ryanlabouve.com/jwt-rails-api-challenge/">this previous tutorial</a> (<a href="https://jwt.io/">JWT</a> + JSON API)</li>
+<li>We&#39;ll use <a href="http://www.ember-cli-mirage.com/">Mirage</a> to mock the API for testing</li>
+</ul>
+<p><hr></p>
+<p><h2>What We&#39;re Making, More Detail</h2></p>
+<div class="clearfix">
+  <div class="col sm-col-4">
+    <div class="bold">Public Posts</div>
+    <ul>
+      <li>List of public posts on left</li>
+    </ul>
+    <strong>User Login</strong>
+    <ul>
+      <li><em>User not logged in–</em> show a login form</li>
+      <li><em>User logged in–</em> show a button to log out in place of the form
+</li>
+    </ul>
+
+    <strong>Private Posts</strong>
+
+    <ul>
+      <li><em>User not logged in–</em> show a notice to login</li>
+      <li><em>User logged in–</em> Show a lists of posts
+</li>
+    </ul>
+
+    <h3>In terms of components</h3>
+    <ul>
+      <li><code>{{public-posts}}</code> — A list of all public posts</li>
+      <li><code>{{blog-post}}</code> — A single post</li>
+      <li><code>{{login-form}}</code> — A form to help users login / logout</li>
+      <li><code>{{private-posts}}</code>— A list of all private posts</li>
+    </ul>
+  </div>
+  <div class="col sm-col-8">
+    <img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa/prototype-components.jpg" alt="Our Prototype w/Components">
+  </div>
+</div>
+
+<hr>
+
+<h2 id="mocking-the-backend-tdd-for-public-posts">Mocking The Backend &amp; TDD for Public Posts</h2>
+<h3 id="installing-and-configuring-mirage">Installing and Configuring Mirage</h3>
+<p><a href="http://www.ember-cli-mirage.com/">Mirage</a> allows us to fake our API so far as that we can use for testing and development.</p>
+<pre><code>ember install ember-cli-mirage@beta
+</code></pre><p>We&#39;ll start by configuring mirage to handle our public posts.</p>
+<p>When we do <code>GET /public-posts</code> from an ajax call, we&#39;ll get a JSON API compliant object back with posts (which is exactly how <a href="http://ryanlabouve.com/jwt-rails-api-challenge/">our API</a> responds). For Mirage to do this we&#39;ll need to create a <code>publicPost</code> mirage-model and a <code>publicPost</code> mirage-factory to start.</p>
+<blockquote>
+<p>Mirage models create <em>tables</em> in Mirage&#39;s in memory database, while factories are the blueprints for what the data should look like in those tables.</p>
+</blockquote>
+<pre><code>ember g mirage-model publicPost
+ember g mirage-factory publicPost
+</code></pre><p>We don&#39;t have to do anything with the model out of the box.</p>
+<p>For the factory, we&#39;ll need to describe what kind of data we&#39;ll want back. This should make the Schema from the API <code>PublicPost(title:string, body:text, type:string)</code>.</p>
+<pre><code>// mirage/factories/public-post.js
+import { Factory, faker } from &#39;ember-cli-mirage&#39;;
+
+export default Factory.extend({
+  body: faker.lorem.words(),
+  title: faker.lorem.paragraphs(),
+  createdAt: faker.date.past()
+});
+</code></pre><blockquote>
+<p>Mirage is using <a href="https://github.com/FotoVerite/Faker.js">faker</a> to generate realistic fake data. Check it out for additional methods you could use in your factories.</p>
+</blockquote>
+<p>So far, we have a fake table to store our <code>public-posts</code>, and a blueprint to describe what that data should look like, but we are missing a way to associate a route (e.g. <code>GET /public-posts</code>) to that data. So, similar to <code>router.js</code> in Ember we are able to describe these mock mappings in mirage/config.js.</p>
+<pre><code>// mirage/config.js
+export default function() {
+  this.get(&#39;/public-posts&#39;);
+}
+</code></pre><blockquote>
+<p>To better understand what Mirage is doing here, I recommend reading <a href="http://www.ember-cli-mirage.com/docs/v0.2.0-beta.8/route-handlers/">the concerning docs</a> or more specifically about the <a href="http://www.ember-cli-mirage.com/docs/v0.2.0-beta.8/shorthands/">shorthands</a>, which allow for such expressive statements.</p>
+</blockquote>
+<p>Now that we&#39;ve modeled <code>PublicPosts</code> from the backend, let&#39;s move on to write some acceptance tests to help us implement <code>PublicPosts</code> on the front-end.</p>
+<h4 id="acceptance-test-for-public-posts">Acceptance Test for Public Posts</h4>
+<pre><code>ember g acceptance-test public-posts
+</code></pre><p>(I&#39;ve left notes in the comments)</p>
+<pre><code>import { test } from &#39;qunit&#39;;
+import moduleForAcceptance from &#39;ember-jwt-esa-blog/tests/helpers/module-for-acceptance&#39;;
+
+moduleForAcceptance(&#39;Acceptance | public posts&#39;);
+
+test(&#39;public posts on /&#39;, function(assert) {
+  visit(&#39;/&#39;);
+
+  // Here is where we are telling mirage
+  // to stick 5 public posts, generated from
+  // our blueprint, into the public-post table
+  // available from our api
+  server.createList(&#39;public-post&#39;, 5);
+
+  // the server variable is something that
+  // mirage gives us.
+
+  andThen(function() {
+    // We&#39;re saying that the css class
+    // `.public-post` would be used on a
+    // display container for any public posts,
+    // and based on our `server.createList`,
+    // we exepct there should be 5
+    assert.equal(
+      find(&#39;.public-post&#39;).length,
+      5,
+      &#39;We can see all the public posts on /&#39;
+    );
+  });
+});
+</code></pre><p>And now if we <code>ember serve</code> and visit <code>http://localhost:4200/tests</code>, Yay! Failing test!</p>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa/pubic-post-failing-tests.jpg" alt="Public Post Failing"></p>
+<p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/3470e918ccddb93d22e88fa2553af112d8ba27d1">code checkpoint</a>)</p>
+<h4 id="implement-publicposts-">Implement <code>PublicPosts</code></h4>
+<p>Let&#39;s work naïvely from the router down. This way, the errors will guide us through the implementation. I&#39;ll start by generating the application route and trying to pass in <code>PublicPosts</code> through the model hook.</p>
+<pre><code>ember g route application
+</code></pre><p>And then...</p>
+<pre><code>// app/routes/application.js
+import Ember from &#39;ember&#39;;
+
+export default Ember.Route.extend({
+  model() {
+    return this.store.findAll(&#39;publicPost&#39;);
+  }
+});
+</code></pre><p>Cool, so now our tests are throwing <code>Error: No model was found for &#39;publicPost&#39;</code>. So let&#39;s generate that:</p>
+<p><code>ember g model publicPost</code></p>
+<p>Since we know what attributes we&#39;re supposed to have on the model, let&#39;s dive down a level and write a unit test. While this is not 100% necessary, I think it&#39;s a good practice and helps us be intentional about what gets added/removed from the model.</p>
+<p>What we want to test: </p>
+<ol>
+<li>We have the correct number of attributes on the model</li>
+<li>Our attributes match the Schema (i.e. title, body, and createdAt)</li>
+</ol>
+<pre><code>// test/unit/models/public-post.js
+import { moduleForModel, test } from &#39;ember-qunit&#39;;
+
+moduleForModel(&#39;public-post&#39;, &#39;Unit | Model | public post&#39;, {
+});
+
+test(&#39;has correct attributes&#39;, function(assert) {
+  let model = this.subject();
+
+  // Converts props on our model to array
+  const actualAttributes = Object.keys(model.toJSON());
+
+  // Should have the same values as this array
+  const correctAttributes = [
+    &#39;title&#39;,
+    &#39;body&#39;,
+    &#39;createdAt&#39;
+  ];
+
+  assert.equal(
+    actualAttributes.length,
+    correctAttributes.length,
+    `We are expecting ${correctAttributes.lenght} attributes, and have found ${actualAttributes.length}`
+  );
+
+  // Loop through the keys and check them one at a time
+  actualAttributes.forEach((actualKey) =&gt; {
+    assert.equal(
+      correctAttributes.indexOf(actualKey) &gt; -1,
+      true,
+      `We are expecting ${actualKey} to be in the list of correctAttributes`
+    );
+  });
+});
+</code></pre><p>Now let&#39;s lock the tests to <code>Unit | Model | public post</code> and get&#39;em green.</p>
+<pre><code>import Model from &#39;ember-data/model&#39;;
+import attr from &#39;ember-data/attr&#39;;
+
+export default Model.extend({
+  title: attr(&#39;string&#39;),
+  body: attr(&#39;string&#39;),
+  createdAt: attr(&#39;date&#39;)
+});
+</code></pre><p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa/green-model-tests.jpg" alt="Model tests in testem"></p>
+<p>And now we can go back to filter for all...</p>
+<p>We know we have the correct public posts model, and we have that loading with the <code>/</code> route, so what&#39;s left?</p>
+<p>We need to actually display them!</p>
+<pre><code>// app/templates/application.hbs
+{{#each model as |post|}}
+  &lt;div class=&quot;public-post&quot;&gt;
+    {{post.title}}
+  &lt;/div&gt;
+{{else}}
+  No Public Posts Found!
+{{/each}}
+</code></pre><p>:boom: passing tests!</p>
+<blockquote>
+<p>Below is a screenshot from <code>pauseTest();</code>, where we can preview Mirage doing its thing.</p>
+</blockquote>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa/public-post-pause-test.jpg" alt="Public Posts Pause Test"></p>
+<p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/37724c13a56ac3ed2b5c550ec3e7901855195d82">code checkpoint</a>)</p>
+<p>Let&#39;s take a moment to refactor towards the component structure we decided on about for <code>{{public-post}}</code>. And now, our acceptance test will help ensure we don&#39;t mess stuff up as we do.</p>
+<h4 id="-public-post-minor-refactor-1">{{public-post}}: Minor Refactor #1</h4>
+<pre><code>ember g component public-posts --pod
+</code></pre><pre><code>// app/templates/application.hbs
+{{public-posts posts=model}}
+</code></pre><p>Notice we are changing the variable to be named <code>posts</code>.</p>
+<pre><code>// app/components/public-post/template.hbs
+{{#each posts as |post|}}
+  &lt;div class=&quot;public-post&quot;&gt;
+    {{post.title}}
+  &lt;/div&gt;
+{{else}}
+  No Public Posts Found!
+{{/each}}
+</code></pre><p>Our previous acceptance test is now green, but a component integration test is blowing up.</p>
+<p>This test was generated with our component... let&#39;s change it to be more of a sanity check. We are just going to render the component, and expect some type of class on the components wrapper for now:</p>
+<pre><code>import { moduleForComponent, test } from &#39;ember-qunit&#39;;
+import hbs from &#39;htmlbars-inline-precompile&#39;;
+
+moduleForComponent(&#39;public-posts&#39;, &#39;Integration | Component | public posts&#39;, {
+  integration: true
+});
+
+test(&#39;it renders&#39;, function(assert) {
+  this.render(hbs`{{public-posts}}`);
+  assert.equal(this.$(&#39;.public-posts-component&#39;).length, 1);
+});
+</code></pre><p>And add a CSS class name to our component wrapper to make it pass.</p>
+<pre><code>// app/components/public-post/component.js
+
+import Ember from &#39;ember&#39;;
+
+export default Ember.Component.extend({
+  classNames: [&#39;public-posts-component&#39;]
+});
+</code></pre><p>:boom: Passing tests!</p>
+<p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/8ae992c2411e6d0298bb74ae5c26f8fba0211d48">code checkpoinst</a>)</p>
+<p>And now let&#39;s make one more refactor for our <code>{{blog-post}}</code> component.</p>
+<h4 id="-blog-post-minor-refactor-2">{{blog-post}} Minor Refactor #2</h4>
+<pre><code>ember g component blog-post --pod
+</code></pre><pre><code>// app/components/public-post/template.hbs
+{{#each posts as |post|}}
+  {{blog-post title=post.title body=post.body}}
+{{else}}
+  No Public Posts Found!
+{{/each}}
+</code></pre><p>At this point our tests are passing, but nothing is showing up! Let&#39;s use this moment to make use of the component integration test that was generated for us with <code>{{blog-post}}</code></p>
+<pre><code>// tests/integration/components/blog-post/component-test.js
+import { moduleForComponent, test } from &#39;ember-qunit&#39;;
+import hbs from &#39;htmlbars-inline-precompile&#39;;
+
+moduleForComponent(&#39;blog-post&#39;, &#39;Integration | Component | blog post&#39;, {
+  integration: true
+});
+
+test(&#39;it renders&#39;, function(assert) {
+  const title = &#39;Blog Post Title&#39;;
+  this.set(&#39;title&#39;, title);
+
+  const body = &#39;Now is the time for all good robots...&#39;;
+  this.set(&#39;body&#39;, body);
+
+  this.render(hbs`{{blog-post title=title body=body}}`);
+
+  assert.equal(this.$(&#39;.blog-post-title&#39;).text().trim(), title);
+  assert.equal(this.$(&#39;.blog-post-body&#39;).text().trim(), body);
+});
+</code></pre><p>And now, great!! Failing tests. Once we implement this functinality, we&#39;ll be sure to have generally the right thing showing on screen.</p>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa/blog-post-failing.jpg" alt="blog-post-failing.jpg"></p>
+<pre><code>// app/components/blog-post/template.hbs
+&lt;div class=&quot;blog-post&quot;&gt;
+  &lt;h5 class=&quot;blog-post-title&quot;&gt;
+    {{title}}
+  &lt;/h5&gt;
+  &lt;div class=&quot;blog-post-body&quot;&gt;
+    {{body}}
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre><p>YAY! Green tests.</p>
+<p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/1711cd2eb38ce69535c7d9ea08fee2abcf3344d2">code checkpoinst</a>)</p>
+<h2 id="cut-over-to-live-api">Cut over to live API</h2>
+<p>We&#39;ve been working out of tests this whole time, without much going on for <code>http://localhost:4200</code>.</p>
+<p>Let&#39;s go ahead and cut over to our live api for a sanity check on our progress. This is the one we made in <a href="http://ryanlabouve.com/jwt-rails-api-challenge/">this tutorial</a>, which I&#39;m going to assume is running on <code>http://localhost:3000</code>.</p>
+<blockquote>
+<p>If setting up the API is an issue, please let me know on twitter <a href="http://twitter.com/ryanlabouve">@ryanlabouve</a> and I&#39;d be happy to deploy to heroku and swap tutorial to use external link</p>
+</blockquote>
+<pre><code>ember g adapter application
+</code></pre><p>By default, this is <a href="http://emberjs.com/api/data/classes/DS.JSONAPIAdapter.html">DS.JSONAPIAdapter</a>, which is what we want.</p>
+<p>Inside the environment, we&#39;ll want to configure our host name (i.e. <code>http://localhost:3000</code>) and make sure Mirage is only turned on for the test environment.</p>
+<pre><code>// config/environment.js
+
+// Disable mirage by default
+ENV[&#39;ember-cli-mirage&#39;] = {
+  enabled: false
+};
+
+if (environment === &#39;development&#39;) {
+  ENV.host = &#39;http://localhost:3000&#39;;
+}
+
+if (environment === &#39;test&#39;) {
+  // remove host address for tests
+  // so the paths display omits the url
+  ENV.host = &#39;&#39;;
+
+  // Turn on mirage only for testing
+  ENV[&#39;ember-cli-mirage&#39;] = {
+    enabled: true
+  };
+}
+</code></pre><p>Then inside the generated adapter.</p>
+<pre><code>import JSONAPIAdapter from &#39;ember-data/adapters/json-api&#39;;
+import config from &#39;../config/environment&#39;;
+
+const { host } = config;
+
+export default JSONAPIAdapter.extend({
+  host
+});
+</code></pre><p>And now if we look at our browser, we should see a lot of posts loading from the api!</p>
+<p><img src="../posts/2016-04-17-ember-blog-with-jwt-and-esa/cut-over-to-api.jpg" alt="Cut to api"></p>
+<p>This is actually quite cool. We&#39;ve implemented all of this without a live API, and then we cutover to the actually API and it just works.</p>
+<p>(<a href="https://github.com/ryanlabouve/ember-jwt-esa-blog/commit/37b91cfd9c3bbf990581a1fa3fa242f5d196c87d">checkpoint, level complete</a>)</p>
+<p>Now that we have our API hooked up and public information flowing correctly, next up is working on Ember Simple Auth, Logging in and Out, and Private Posts! See ya next time!
+</p>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <div class="clearfix mxn1">
+    <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box p3">
+        <img class="profile-pic profile-pic-sm center-block" src="../about.jpg" alt="Ryan LaBouve, Profile Pic" />
+        <h2 class="serif center">Ryan LaBouve</h2>
+        <p class="center text-primary primary">—Ember.js &amp; Node—</p>
+        <p class="h5 center">Disciple of Jesus Christ &amp; family man. Doer of JS &amp; maker of webs.</p>
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="bar brand-article">
+          <div class="btn serif italic"><span class="typcn typcn-document-text"></span> Recent Articles</div>
+        </div>
+      </div>
+      <div class="box p2">
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa-2" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-18-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-17-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/jwt-rails-api-challenge" class="h6">
+
+              JWT Rails API Challenge <div class="h6 muted right">04-12-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-infiniscroll-with-api" class="h6">
+
+              Ember Problems Infiniscroll with an... <div class="h6 muted right">09-27-15</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-pagination-with-api" class="h6">
+
+              Ember Problems, Pagination with an ... <div class="h6 muted right">09-26-15</div>
+            </a>
+            
+          </div>
+        
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="brand-rss bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-rss"></span> RSS
+          </a>
+        </div>
+        <div class="brand-twitter bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-twitter"></span> Twitter
+          </a>
+        </div>
+        <div class="brand-linkedin bar clearfix">
+          <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-linkedin"></span> LinkedIn
+          </a>
+        </div>
+        <div class="brand-github bar clearfix">
+          <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-github"></span> Github
+          </a>
+        </div>
+        <div class="brand-dribbble bar clearfix">
+          <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-dribbble"></span> Dribbble
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt4 center">
+  <a href="http://holyarchers.com">
+    <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" />
+  </a>
+</div>
+
+
+  <script src="/js/app.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71758047-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>

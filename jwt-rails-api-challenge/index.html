@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ryan LaBouve</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic|Droid+Sans:400,700|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/zenburn.min.css">
+    <script src="//cdn.jsdelivr.net/highlight.js/8.8.0/highlight.min.js"></script>
+    <script src="/bower_components/zepto/zepto.min.js"></script>
+  </head>
+  <body>
+  <form class='search-form'>
+    <div class="search-bar hide">
+      <div class="container">
+        <input placeholder="SEARCH..."/>
+      </div>
+    </div>
+  </form>
+
+  <div class="mobile-menu hide md-hide close-menu">
+  <div class="clearfix px2 bar brand-menu">
+    <div class="left">
+      Menu
+    </div>
+    <div class="right bold">
+      <span class="">x</span>
+    </div>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/" class="btn">
+      Blog
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/speaking" class="btn">
+      Speaking
+    </a>
+  </div>
+  <div class="bar brand-github clearfix">
+    <a href="/about" class="btn">
+      About
+    </a>
+  </div>
+  <div class="brand-rss bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-rss"></span> RSS
+    </a>
+  </div>
+  <div class="brand-twitter bar clearfix">
+    <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-twitter"></span> Twitter
+    </a>
+  </div>
+  <div class="brand-linkedin bar clearfix">
+    <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+      <span class="typcn typcn-social-linkedin"></span> LinkedIn
+    </a>
+  </div>
+  <div class="brand-github bar clearfix">
+    <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-github"></span> Github
+    </a>
+  </div>
+  <div class="brand-dribbble bar clearfix">
+    <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+      <span class="typcn typcn-social-dribbble"></span> Dribbble
+    </a>
+  </div>
+</div>
+
+  <div class="header">
+    <div class="clearfix container">
+      <a href="/" class="header__title h3 bold caps left px2">
+        <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" /> Ryan LaBouve
+      </a>
+
+      <a href="/" class="btn left serif italic md-show">
+        Blog
+      </a>
+      <a href="/speaking" class="btn left serif italic md-show">
+        Speaking
+      </a>
+      <a href="/about" class="btn left serif italic md-show">
+        About
+      </a>
+
+      <div class="right md-hide">
+        <a href="#" class="btn btn-icon btn-dark left open-menu">
+          <span class="typcn typcn-th-menu-outline"></span> Menu
+        </a>
+      </div>
+      <div class="right md-show">
+        <a href="http://twitter.com/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-twitter"></span>
+        </a>
+        <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon left">
+          <span class="typcn typcn-social-linkedin"></span>
+        </a>
+        <a href="http://github.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-github"></span>
+        </a>
+        <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon left">
+          <span class="typcn typcn-social-dribbble"></span>
+        </a>
+        <a href="" class="btn btn-icon btn-dark btn-search left">
+          <span class="typcn typcn-zoom"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="container">
+    <div class="box py4 px2 sm-px4">
+      <div class="post lg-px4">
+        <div class="right primary">April 12, 2016</div>
+        <h1 class="serif">JWT Rails API Challenge</h1>
+        <p>Here&#39;s the goal:</p>
+<blockquote>
+<p>Quick and simple Rails API that is JSON API compliant and has secure resources (via JWT) and non-secure resources.</p>
+</blockquote>
+<p>Our scenario: </p>
+<blockquote>
+<p>An read-only API to power a blog that has public posts (accessible by anyone) and private posts (only accessible to users who are logged in).</p>
+</blockquote>
+<h5 id="notes-">Notes:</h5>
+<ul>
+<li>JWT authentication will be implemented using <a href="https://github.com/nsarno/knock">knock</a></li>
+<li>JSON API compliance will be accomplished via <a href="https://github.com/cerebris/jsonapi-resources">JSONAPI::Resources</a></li>
+<li>I&#39;ll link out to relevant tests, with comments on what&#39;s being test, but try to keep the article quick.</li>
+</ul>
+<p>At any point, feel free to checkout the finished <a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog">code</a>. Let&#39;s get started <code>rails-api new rails-api-jwt-toy-blog</code>.</p>
+<h2 id="the-models">The Models</h2>
+<p>Posts will be a base class for PrivatePosts and PublicPosts. For the schema, we want <code>Post(title:string, body:text, type:string)</code> where the <code>type</code> colum will for <code>singe-table inheritance</code> to make the PublicPost and PrivatePost inherit gracefully form Post.</p>
+<p>(For more on single-table inheritance, check out (this post)[<a href="http://blog.arkency.com/2013/07/sti/">http://blog.arkency.com/2013/07/sti/</a>])</p>
+<h3 id="post-model">Post Model</h3>
+<pre><code>rails g model Post title:string body:text type:string
+touch app/models/private_post.rb
+touch app/models/public_post.rb
+</code></pre><p>Then I went ahead and setup <code>PublicPost</code> and <code>PrivatePost</code> as classes that inherit from <code>Post</code>. This will come in handy later when we setup our resources.</p>
+<pre><code># app/models/public_post.rb
+class PublicPost &lt; Post; end
+</code></pre><p>and</p>
+<pre><code># app/models/private_post.rb
+class PrivatePost &lt; Post; end
+</code></pre><p>(<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/commit/3af0e6beb70ce67d86d90143d5d57bdd93a85bd4">checkpoint</a>)</p>
+<ol>
+<li>Setup fixture (<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/7f3fae7d334498a3063508de38b7cf9435c99942/test/fixtures/posts.yml">code</a>)</li>
+<li>Unit test on <code>Post</code> model (<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/4ede77c0c845ad30fdf48b54a71015eded3ce8f9/test/models/post_test.rb">code</a>)</li>
+<li>Implement Post Model (<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/4ede77c0c845ad30fdf48b54a71015eded3ce8f9/app/models/post.rb">code</a>)</li>
+</ol>
+<pre><code>class Post &lt; ActiveRecord::Base
+  validates :body, presence: true
+  validates :title, presence: true
+  validates :type, presence: true
+
+  POST_TYPES = %w(PublicPost PrivatePost)
+  validates :type, :inclusion =&gt; { :in =&gt; POST_TYPES }
+end
+</code></pre><p>At this point, we should have green tests and a working Post, PublicPost, and PrivatePost model. On to <code>User</code>.</p>
+<h3 id="user-resource">User Resource</h3>
+<p><code>User</code> is what will log in to view <code>PrivatePosts</code>.</p>
+<p>We want the <code>User</code> model to implement Rail&#39;s <a href="http://api.rubyonrails.org/classes/ActiveModel/SecurePassword/ClassMethods.html"><code>has_secure_password</code></a>. Using <code>has_secure_password</code>, when we create a <code>User</code>, we&#39;ll pass in a <code>password</code> and <code>password_confirmation</code>, rails will then encrypt and save their password as <code>password_digest</code>. We&#39;ll be able to use this as a building block to later auth our users.</p>
+<p>If you are using Rails Api, you&#39;ll need to add <code>gem &#39;bcrypt&#39;</code> to your Gemfile.</p>
+<p>For the schema, we want <code>User(email:string, name:email, password_digest:string</code> where <code>password_digest</code> is required for <code>has_secure_password</code> to work.</p>
+<pre><code>rails g model user password_digest:string name:string email:string
+</code></pre><p>(<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/commit/7f8591ccb6a51a58f8f957780afd4f092ca2eea7">checkpoint</a>)</p>
+<ol>
+<li>Setup fixtures (<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/7de80841d0c69911afda1153e6e85194a1069574/test/fixtures/users.yml">code</a>)</li>
+<li>Setup unit test (<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/7de80841d0c69911afda1153e6e85194a1069574/test/models/user_test.rb">code</a>)</li>
+<li>Implement <code>User</code> model (<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/commit/7de80841d0c69911afda1153e6e85194a1069574">code</a>)</li>
+</ol>
+<pre><code>class User &lt; ActiveRecord::Base
+  has_secure_password
+
+  validates :name, presence: true
+  validates :email, presence: true
+end
+</code></pre><p>At this point we have a working user model and green tests!</p>
+<h3 id="seeding-posts-and-users">Seeding Posts and Users</h3>
+<p>Now  we&#39;ll create some seeds to give us some posts and users to play with.</p>
+<p>Go ahead and add <code>gem &#39;faker&#39;</code> to your Gemfile and <code>bundle install</code>.</p>
+<pre><code># db/seeds.rb
+Post.destroy_all
+User.destroy_all
+
+User.create!({
+  name: &#39;Lester Tester&#39;,
+  email: &#39;test@user.com&#39;,
+  password: &#39;test1234&#39;,
+  password_confirmation: &#39;test1234&#39;
+})
+
+100.times do
+  PublicPost.create!(
+    title: Faker::Lorem.sentence,
+    body: Faker::Lorem.paragraphs.join(&#39; &#39;)
+  )
+
+  PrivatePost.create!(
+    title: Faker::Lorem.sentence,
+    body: Faker::Lorem.paragraphs.join(&#39; &#39;)
+  )
+end
+</code></pre><p>After this can run <code>bundle exec rake db:seed</code> and verify this worked in <code>rails console</code>.</p>
+<pre><code>rails c
+&gt; PublicPost.length # =&gt; 100
+&gt; PublicPost.first # =&gt; &lt;PublicPost Object&gt;
+</code></pre><h2 id="controllers-and-resources-and-routing-oh-my-">Controllers and Resources and Routing Oh My!</h2>
+<p>Now that we have our models and some dummy data, we&#39;ll want to expose it to the world by setting up our controllers, resources, and routing.</p>
+<p>Let&#39;s introduce <a href="https://github.com/cerebris/jsonapi-resources">JSONAPI::Resources</a> to the project by adding <code>gem &#39;jsonapi-resources&#39;</code> to the Gemfile.</p>
+<h3 id="public-posts">Public Posts</h3>
+<ol>
+<li>Generate your controller and write tests for <code>PublicPosts</code></li>
+</ol>
+<p><code>rails g controller PublicPosts</code>.</p>
+<p>And then set it up as a JSONAPI::Resources controller:</p>
+<pre><code># app/controllers/public_posts_controller.rb
+class PublicPostsController &lt; ApplicationController
+  include JSONAPI::ActsAsResourceController
+end
+</code></pre><p>Next, let&#39;s write the tests for the <code>PublicPosts</code>.</p>
+<p>We want to <code>GET /public-posts</code> and get a list of the public posts, and <code>GET /public-posts/:id</code> to show a single post. Then, we should not be able to create, edit or delete. (Here are the tests: <a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/6294ceaaac4b78b3b7805a1d2fcc207e99318f50/test/controllers/public_posts_controller_test.rb">code</a>)</p>
+<ol>
+<li>Generate <code>PublicPosts</code> resource and add to your routes.rb.</li>
+</ol>
+<p><code>rails generate jsonapi:resource public_posts</code></p>
+<pre><code>class PublicPostResource &lt; JSONAPI::Resource
+  immutable
+  attributes :title, :body
+end
+</code></pre><p>and then in routes</p>
+<pre><code># config/routes.rb
+jsonapi_resources :public_posts
+</code></pre><p>Yay, passing tests! Now let&#39;s move onto our private posts.</p>
+<h3 id="private-posts">Private Posts</h3>
+<p>We are using <a href="https://github.com/nsarno/knock">Knock</a> to do JWT auth. Let&#39;s go ahead and set that up.</p>
+<p>Add <code>gem &#39;knock&#39;</code> to your Gemfile and <code>bundle install</code>.</p>
+<p>Run <code>rails generate knock:install</code>. This will add <code>config/initializers/knock.rb</code>, which you may want to peruse the comments for additional configuration options.</p>
+<p>Mount the engine in your <code>routes.rb</code> to expose our authentication endpoints.</p>
+<pre><code># config/routes.rb
+...
+mount Knock::Engine =&gt; &quot;/knock&quot;
+...
+</code></pre><p>Add the <code>Knock::Authenticable</code> module in ApplicationController to expose Knock authentication methods to our controllers.</p>
+<pre><code>class ApplicationController &lt; ActionController::API
+  include Knock::Authenticable
+end
+</code></pre><p>Then later we will be able to add <code>before_action :authenticate</code> to our <code>PrivatePosts</code> controller to preform the actual authentication.</p>
+<p>(<a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/commit/2fd20fce149887ce7cc4a7f3de0551eab210c528">code checkpoint</a>)</p>
+<p>(There&#39;s a bit of duplication here from the previous section to setup private posts due to their similarity to public posts.)</p>
+<ol>
+<li>Generate your controller and write tests for <code>Private Posts</code></li>
+</ol>
+<p><code>rails g controller PrivatePosts</code>.</p>
+<p>And then set it up as a JSONAPI::Resources controller:</p>
+<pre><code># app/controllers/private_posts_controller.rb
+class PrivatePostsController &lt; ApplicationController
+  include JSONAPI::ActsAsResourceController
+end
+</code></pre><p>Next, let&#39;s write the tests for the <code>PrivatePosts</code>.</p>
+<p>We want to <code>GET /public-posts</code> for authorized users and a <code>401</code> for unathroized users. Same things for the show routes of <code>GET /public-posts/:id</code>. Then, we should not be able to create, edit or delete. (Here are the <a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/147df98/test/controllers/private_posts_controller_test.rb">tests</a>)</p>
+<ol>
+<li>Generate <code>PrivatePosts</code> resource and add to your routes.rb.</li>
+</ol>
+<p><code>rails generate jsonapi:resource private_posts</code></p>
+<pre><code>class PrivatePostResource &lt; JSONAPI::Resource
+  immutable
+  attributes :title, :body
+end
+</code></pre><p>and then in routes</p>
+<pre><code># config/routes.rb
+...
+jsonapi_resources :private_posts
+...
+</code></pre><p>Now it&#39;s time to circle back around to adding authentication to our <code>PrivatePosts</code>.</p>
+<pre><code>class PrivatePostsController &lt; ApplicationController
+  include JSONAPI::ActsAsResourceController
+  before_filter :authenticate # added line
+end
+</code></pre><p>At this point, our tests are green and our challenge is complete!</p>
+<p>Feel free to go <a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog">check out the project</a></p>
+<h2 id="curling-for-sanity">Curling for Sanity</h2>
+<p>I&#39;ve included the <a href="https://luckymarmot.com/paw">Paw</a> file in the project: <a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/master/MainRequests.paw">here</a>.</p>
+<p>For the sake of being generic, below I&#39;ll walk through how this works via CURL. And, we&#39;ll assume you are running this project on port 3000. If you are not, you&#39;ll need to make slight adjustments below.</p>
+<p>Don&#39;t forget, for this to be very satisfying, you&#39;ll need to seed the database by running <code>bundle exec rake db:seed</code>.</p>
+<h3 id="get-public-posts">GET /public-posts</h3>
+<p>Highlights: </p>
+<ul>
+<li>Requst type of GET</li>
+<li>Header that needs to set <code>Content-Type: application/json</code> (which this will be the same for all calls for JSONAPI compliance)</li>
+</ul>
+<pre><code>curl -X &quot;GET&quot; &quot;http://localhost:3000/public-posts/&quot; \
+    -H &quot;Content-Type: application/json&quot;
+</code></pre><h3 id="get-private-posts">GET /private-posts</h3>
+<p>If you try the same request on private posts, you&#39;ll get a <code>401</code>. This is actually a two part process.</p>
+<h4 id="step-1-auth">Step 1: Auth</h4>
+<p>Highlights:</p>
+<ul>
+<li>POST</li>
+<li>Pass in the email and password of the user setup in <a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/blob/master/db/seeds.rb">seeds</a>. </li>
+<li>Knock expects the request to be wrapped in a json object called auth. <a href="https://github.com/nsarno/knock#authenticating-from-a-web-or-mobile-application">Check the docs</a> for more, and don&#39;t forget to check out the config file knock generaged for more customization options.</li>
+</ul>
+<pre><code>curl -X &quot;POST&quot; &quot;http://localhost:3000/knock/auth_token&quot; \
+    -H &quot;Content-Type: application/json&quot; \
+    -d $&#39;{&quot;auth&quot;: {&quot;email&quot;: &quot;test@user.com&quot;, &quot;password&quot;: &quot;test1234&quot;}}
+</code></pre><p>Output will be something like:</p>
+<pre><code>HTTP/1.1 201 Created 
+
+{&quot;jwt&quot;:&quot;eyJ0eXAiOiJKV1QiLCJhb...&quot;}
+</code></pre><p>The JWT token generated here is needed for the next request.</p>
+<h4 id="step-2-request-private-resource-with-token">Step 2: Request private resource with token</h4>
+<p>Highlights:</p>
+<ul>
+<li>The header <code>Authorization: Bearer [token]</code> is what auths our request, using the toekn from the previous step</li>
+<li>Otherwise, it&#39;s the same request as the one for public-posts.</li>
+</ul>
+<pre><code>curl -X &quot;GET&quot; &quot;http://localhost:3000/private-posts&quot; \
+    -H &quot;Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJI.....&quot; \
+    -H &quot;Content-Type: application/json&quot;
+</code></pre><h2 id="edit-4-14-dang-you-cors-">Edit 4/14 Dang you cors!</h2>
+<p>When hookig this API up to the ember app that goes along with the next tutorial,
+I realized that I didn&#39;t setup cors.</p>
+<p>Check out <a href="https://github.com/ryanlabouve/rails-api-jwt-toy-blog/commit/976a26fbacaf63d68752eae62307fd499805c89c">This
+commit</a>
+for more information on how to do this.</p>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <div class="clearfix mxn1">
+    <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box p3">
+        <img class="profile-pic profile-pic-sm center-block" src="../about.jpg" alt="Ryan LaBouve, Profile Pic" />
+        <h2 class="serif center">Ryan LaBouve</h2>
+        <p class="center text-primary primary">—Ember.js &amp; Node—</p>
+        <p class="h5 center">Disciple of Jesus Christ &amp; family man. Doer of JS &amp; maker of webs.</p>
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="bar brand-article">
+          <div class="btn serif italic"><span class="typcn typcn-document-text"></span> Recent Articles</div>
+        </div>
+      </div>
+      <div class="box p2">
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa-2" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-18-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-blog-with-jwt-and-esa" class="h6">
+
+              Ember Blog with JWT and Ember Simpl... <div class="h6 muted right">04-17-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/jwt-rails-api-challenge" class="h6">
+
+              JWT Rails API Challenge <div class="h6 muted right">04-12-16</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-infiniscroll-with-api" class="h6">
+
+              Ember Problems Infiniscroll with an... <div class="h6 muted right">09-27-15</div>
+            </a>
+            
+              <div class="sep"></div>
+            
+          </div>
+        
+          <div class="bar">
+            <a href="/ember-problems-pagination-with-api" class="h6">
+
+              Ember Problems, Pagination with an ... <div class="h6 muted right">09-26-15</div>
+            </a>
+            
+          </div>
+        
+      </div>
+    </div>
+     <div class="sm-col sm-col-4 px1 mt2">
+      <div class="box">
+        <div class="brand-rss bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-rss"></span> RSS
+          </a>
+        </div>
+        <div class="brand-twitter bar clearfix">
+          <a href="http://twitter.com/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-twitter"></span> Twitter
+          </a>
+        </div>
+        <div class="brand-linkedin bar clearfix">
+          <a href="https://www.linkedin.com/in/ryanlabouve" class="btn btn-icon">
+            <span class="typcn typcn-social-linkedin"></span> LinkedIn
+          </a>
+        </div>
+        <div class="brand-github bar clearfix">
+          <a href="http://github.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-github"></span> Github
+          </a>
+        </div>
+        <div class="brand-dribbble bar clearfix">
+          <a href="http://dribbble.com/ryanlabouve/" class="btn btn-icon">
+            <span class="typcn typcn-social-dribbble"></span> Dribbble
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt4 center">
+  <a href="http://holyarchers.com">
+    <img src="/assets/ha-circle.png" height=25 width=25 style="vertical-align: text-bottom;" alt="HolyArchers.com" />
+  </a>
+</div>
+
+
+  <script src="/js/app.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-71758047-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>
